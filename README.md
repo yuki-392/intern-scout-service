@@ -117,7 +117,7 @@ Gitへ登録しません。
 - [x] 募集への応募と応募メッセージの自動送信
 - [x] アカウント削除・匿名化
 - [x] 架空のseedデータ
-- [ ] Vercel・Renderへの無料デプロイ
+- [x] Vercel・Renderへの無料デプロイ
 
 ## 設計方針
 
@@ -209,6 +209,9 @@ docker compose run --rm backend bin/bundler-audit check --update
 - 無料公開環境のcold startとDB有効期限への対応
 
 ### 無料デモ環境への公開
+
+- Web: [https://intern-scout-service-1gwnfgvws-yukis-projects-4e18f76e.vercel.app](https://intern-scout-service-1gwnfgvws-yukis-projects-4e18f76e.vercel.app)
+- API: [https://intern-scout-api.onrender.com](https://intern-scout-api.onrender.com)
 
 1. Renderでリポジトリの `render.yaml` をBlueprintとして読み込み、
    `DEMO_USER_PASSWORD` に8文字以上の値を設定します。
