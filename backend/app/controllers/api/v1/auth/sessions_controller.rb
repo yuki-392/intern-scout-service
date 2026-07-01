@@ -1,0 +1,49 @@
+module Api
+  module V1
+    module Auth
+      class SessionsController < ApplicationController
+        include Authentication
+
+        before_action :reject_authenticated_user!, only: :create
+        before_action :authenticate_user!, only: :destroy
+
+        def create
+          user = User.active.find_by(email: normalized_email)
+
+          if user&.authenticate(login_params[:password])
+            sign_in(user)
+            render json: { data: CurrentUserSerializer.new(user).as_json }
+          else
+            render_invalid_credentials
+          end
+        end
+
+        def destroy
+          reset_session
+          head :no_content
+        end
+
+        private
+
+        def login_params
+          params.require(:session).permit(:email, :password)
+        end
+
+        def normalized_email
+          login_params[:email].to_s.strip.downcase
+        end
+
+        def render_invalid_credentials
+          render json: {
+            errors: [
+              {
+                code: "invalid_credentials",
+                message: "メールアドレスまたはパスワードが正しくありません"
+              }
+            ]
+          }, status: :unauthorized
+        end
+      end
+    end
+  end
+end

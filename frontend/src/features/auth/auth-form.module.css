@@ -1,0 +1,154 @@
+.page {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: 40px 20px;
+  background:
+    radial-gradient(circle at 15% 15%, #e7f3ee 0, transparent 34%),
+    radial-gradient(circle at 85% 85%, #f4e9d8 0, transparent 32%),
+    #f8faf8;
+}
+
+.card {
+  width: min(100%, 560px);
+  display: grid;
+  gap: 24px;
+  padding: clamp(28px, 6vw, 48px);
+  border: 1px solid #dce5df;
+  border-radius: 24px;
+  background: rgb(255 255 255 / 92%);
+  box-shadow: 0 24px 80px rgb(35 66 49 / 10%);
+}
+
+.heading {
+  display: grid;
+  gap: 8px;
+}
+
+.heading h1 {
+  margin: 0;
+  color: #173a29;
+  font-size: clamp(1.8rem, 5vw, 2.5rem);
+}
+
+.muted,
+.help {
+  color: #617068;
+  line-height: 1.7;
+}
+
+.choices,
+.form,
+.fields {
+  display: grid;
+  gap: 16px;
+}
+
+.field {
+  display: grid;
+  gap: 7px;
+  font-weight: 700;
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 12px;
+  border: 1px solid #aebdb5;
+  border-radius: 10px;
+  color: #17231c;
+  background: #fff;
+  font: inherit;
+}
+
+.field textarea {
+  min-height: 160px;
+  resize: vertical;
+}
+
+.field input:focus {
+  border-color: #276247;
+  outline: 3px solid rgb(39 98 71 / 18%);
+}
+
+.error {
+  color: #a63232;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.summary {
+  padding: 14px 16px;
+  border: 1px solid #d68b8b;
+  border-radius: 10px;
+  color: #842828;
+  background: #fff4f4;
+}
+
+.summary ul {
+  margin: 8px 0 0;
+  padding-left: 1.25rem;
+}
+
+.primary,
+.secondary,
+.textButton {
+  min-height: 48px;
+  border-radius: 999px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.primary {
+  border: 1px solid #276247;
+  color: #fff;
+  background: #276247;
+}
+
+.secondary {
+  border: 1px solid #276247;
+  color: #276247;
+  background: #fff;
+}
+
+.textButton {
+  justify-self: start;
+  min-height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  color: #276247;
+  background: transparent;
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+.primary:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.links {
+  display: grid;
+  gap: 12px;
+  padding-top: 4px;
+  border-top: 1px solid #e4e9e6;
+}
+
+.links a {
+  color: #276247;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+.notice {
+  padding: 12px 14px;
+  border-radius: 10px;
+  color: #62491f;
+  background: #fff5df;
+  line-height: 1.6;
+}

@@ -1,0 +1,138 @@
+.page {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: 48px 24px;
+  background:
+    radial-gradient(circle at 12% 18%, #e7f3ee 0, transparent 34%),
+    radial-gradient(circle at 86% 82%, #f4e9d8 0, transparent 32%),
+    #f8faf8;
+}
+
+.shell {
+  width: min(100%, 720px);
+  padding: clamp(32px, 7vw, 72px);
+  border: 1px solid #dce5df;
+  border-radius: 28px;
+  background: rgb(255 255 255 / 88%);
+  box-shadow: 0 24px 80px rgb(35 66 49 / 10%);
+}
+
+.eyebrow {
+  margin-bottom: 24px;
+  color: #276247;
+  font-size: 0.78rem;
+  font-weight: 750;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.notice {
+  padding: 12px 16px;
+  border-radius: 12px;
+  color: #24563e;
+  background: #e7f3ee;
+  font-weight: 700;
+}
+
+.hero {
+  display: grid;
+  gap: 20px;
+}
+
+.hero h1 {
+  max-width: 15ch;
+  color: #173a29;
+  font-size: clamp(2.25rem, 7vw, 4.5rem);
+  line-height: 1.08;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+
+.hero p {
+  max-width: 52ch;
+  color: #53645b;
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  line-height: 1.85;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 40px;
+}
+
+.actions a {
+  min-height: 52px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 18px;
+  border: 1px solid #276247;
+  border-radius: 999px;
+  font-weight: 700;
+  text-align: center;
+  transition:
+    background-color 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.primary {
+  color: #fff;
+  background: #276247;
+}
+
+.secondary {
+  color: #276247;
+  background: transparent;
+}
+
+.login {
+  margin-top: 24px;
+  color: #66736c;
+  text-align: center;
+}
+
+.login a {
+  margin-left: 0.35em;
+  color: #276247;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .actions a:hover {
+    transform: translateY(-2px);
+  }
+
+  .primary:hover {
+    background: #1d4d37;
+  }
+
+  .secondary:hover {
+    background: #edf5f0;
+  }
+}
+
+@media (max-width: 560px) {
+  .page {
+    padding: 20px;
+  }
+
+  .shell {
+    border-radius: 22px;
+  }
+
+  .actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .actions a {
+    transition: none;
+  }
+}

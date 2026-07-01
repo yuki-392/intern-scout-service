@@ -1,0 +1,10 @@
+.panel { display: grid; gap: 16px; padding: 22px; border: 1px solid #dce5df; border-radius: 16px; background: white; }
+.form { display: grid; gap: 14px; }
+.field { display: grid; gap: 6px; font-weight: 700; }
+.field input, .field textarea { padding: 10px; border: 1px solid #aebdb5; border-radius: 9px; font: inherit; }
+.field textarea { min-height: 140px; }
+.button { min-height: 44px; padding: 8px 18px; border: 1px solid #276247; border-radius: 999px; color: white; background: #276247; font-weight: 700; }
+.list { display: grid; gap: 14px; padding: 0; list-style: none; }
+.stacks { display: flex; gap: 8px; flex-wrap: wrap; padding: 0; list-style: none; }
+.stacks li { padding: 4px 10px; border-radius: 999px; background: #e7f3ee; }
+.error { color: #a63232; }
