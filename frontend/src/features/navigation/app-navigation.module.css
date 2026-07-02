@@ -7,7 +7,7 @@
   backdrop-filter: blur(10px);
 }
 
-.nav {
+.desktopNav {
   width: min(100% - 32px, 1120px);
   min-height: 64px;
   margin: 0 auto;
@@ -15,6 +15,12 @@
   align-items: center;
   justify-content: space-between;
   gap: 24px;
+}
+
+.mobileHeader,
+.mobileBottom,
+.mobileSpacer {
+  display: none;
 }
 
 .brand {
@@ -73,12 +79,98 @@
 }
 
 @media (max-width: 760px) {
-  .nav {
-    padding: 10px 0;
-    align-items: flex-start;
+  .desktopNav {
+    display: none;
   }
 
-  .links {
-    gap: 2px 12px;
+  .mobileHeader {
+    position: relative;
+    width: min(100% - 32px, 1120px);
+    min-height: 60px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .menuButton,
+  .menuItem {
+    min-width: 48px;
+    min-height: 48px;
+    border: 0;
+    color: #335b47;
+    background: transparent;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .menuButton:focus-visible,
+  .menuItem:focus-visible {
+    outline: 3px solid #d28a33;
+    outline-offset: 3px;
+  }
+
+  .menu {
+    position: absolute;
+    z-index: 20;
+    top: calc(100% - 4px);
+    right: 0;
+    min-width: 200px;
+    display: grid;
+    padding: 8px;
+    border: 1px solid #dce5df;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 16px 40px rgb(23 58 41 / 18%);
+  }
+
+  .menuItem {
+    width: 100%;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    border-radius: 9px;
+    text-align: left;
+  }
+
+  .menuItem:hover {
+    background: #eef5f1;
+  }
+
+  .mobileBottom {
+    position: fixed;
+    z-index: 15;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
+    border-top: 1px solid #dce5df;
+    background: rgb(255 255 255 / 97%);
+    box-shadow: 0 -8px 24px rgb(23 58 41 / 10%);
+    backdrop-filter: blur(10px);
+  }
+
+  .mobileBottom .link {
+    min-width: 48px;
+    min-height: 48px;
+    justify-content: center;
+    padding: 6px 4px;
+    font-size: 0.85rem;
+    text-align: center;
+  }
+
+  .mobileBottom .link[aria-current="page"] {
+    border-radius: 10px;
+    background: #e7f3ee;
+    text-decoration: none;
+  }
+
+  .mobileSpacer {
+    display: block;
+    height: calc(60px + env(safe-area-inset-bottom));
   }
 }

@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { AppNavigation } from "./app-navigation";
@@ -30,10 +30,11 @@ describe("AppNavigation", () => {
     mocks.logoutUser.mockResolvedValue(undefined);
     render(<AppNavigation />);
 
-    expect(await screen.findByRole("link", { name: "募集" })).toBeDefined();
-    expect(screen.getByRole("link", { name: "会話" }).getAttribute("href")).toBe("/conversations");
-    expect(screen.getByRole("link", { name: "プロフィール" }).getAttribute("href")).toBe("/profile/edit");
-    expect(screen.getByRole("link", { name: "アカウント設定" }).getAttribute("href")).toBe("/settings/account");
+    const desktop = await screen.findByRole("navigation", { name: "デスクトップナビゲーション" });
+    expect(within(desktop).getByRole("link", { name: "募集" })).toBeDefined();
+    expect(within(desktop).getByRole("link", { name: "会話" }).getAttribute("href")).toBe("/conversations");
+    expect(within(desktop).getByRole("link", { name: "プロフィール" }).getAttribute("href")).toBe("/profile/edit");
+    expect(within(desktop).getByRole("link", { name: "アカウント設定" }).getAttribute("href")).toBe("/settings/account");
 
     fireEvent.click(screen.getByRole("button", { name: "ログアウト" }));
     await waitFor(() => expect(mocks.logoutUser).toHaveBeenCalledTimes(1));
@@ -46,9 +47,29 @@ describe("AppNavigation", () => {
     mocks.getCurrentUser.mockResolvedValue({ id: 2, email: "company@example.com", role: "company", company: { id: 1, name: "会社" } });
     render(<AppNavigation />);
 
-    expect(await screen.findByRole("link", { name: "インターン生を探す" })).toBeDefined();
-    expect(screen.getByRole("link", { name: "自社募集" }).getAttribute("href")).toBe("/company/jobs");
-    expect(screen.queryByRole("link", { name: "プロフィール" })).toBeNull();
+    const desktop = await screen.findByRole("navigation", { name: "デスクトップナビゲーション" });
+    expect(within(desktop).getByRole("link", { name: "インターン生を探す" })).toBeDefined();
+    expect(within(desktop).getByRole("link", { name: "自社募集" }).getAttribute("href")).toBe("/company/jobs");
+    expect(within(desktop).queryByRole("link", { name: "プロフィール" })).toBeNull();
+  });
+
+  it("separates primary mobile navigation from settings and logout", async () => {
+    mocks.getCurrentUser.mockResolvedValue({ id: 1, email: "intern@example.com", role: "intern", company: null });
+    render(<AppNavigation />);
+
+    const mobile = await screen.findByRole("navigation", { name: "モバイルナビゲーション" });
+    expect(within(mobile).getByRole("link", { name: "募集" })).toBeDefined();
+    expect(within(mobile).getByRole("link", { name: "会話" })).toBeDefined();
+    expect(within(mobile).getByRole("link", { name: "プロフィール" })).toBeDefined();
+    expect(within(mobile).queryByRole("link", { name: "アカウント設定" })).toBeNull();
+
+    const menuButton = screen.getByRole("button", { name: "メニューを開く" });
+    expect(menuButton.getAttribute("aria-expanded")).toBe("false");
+    fireEvent.click(menuButton);
+    expect(screen.getByRole("button", { name: "メニューを閉じる" }).getAttribute("aria-expanded")).toBe("true");
+    const menu = screen.getByRole("menu", { name: "アカウントメニュー" });
+    expect(within(menu).getByRole("menuitem", { name: "アカウント設定" })).toBeDefined();
+    expect(within(menu).getByRole("menuitem", { name: "ログアウト" })).toBeDefined();
   });
 
   it("redirects an expired session and preserves the current path", async () => {
