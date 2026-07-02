@@ -1,14 +1,14 @@
-.shell { min-height: 100svh; padding: 40px 20px; background: #f8faf8; }
+.shell { min-height: 100svh; padding: var(--space-page); background: #f8faf8; }
 .content { width: min(100%, 960px); margin: auto; display: grid; gap: 24px; }
-.search { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 20px; border: 1px solid #dce5df; border-radius: 18px; background: white; }
+.search { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 20px; border: 1px solid var(--color-border); border-radius: var(--radius-card); background: var(--color-surface); }
 .field { display: grid; gap: 6px; font-weight: 700; }
-.field input { min-height: 44px; padding: 8px 10px; border: 1px solid #aebdb5; border-radius: 9px; font: inherit; }
+.field input { min-height: var(--control-height); padding: 8px 10px; border: 1px solid #aebdb5; border-radius: var(--radius-control); font: inherit; }
 .actions, .pagination { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
-.button { min-height: 42px; padding: 8px 18px; border: 1px solid #276247; border-radius: 999px; color: white; background: #276247; font-weight: 700; }
-.secondary { color: #276247; background: white; }
+.button { min-height: var(--control-height); padding: 8px 18px; border: 1px solid var(--color-primary); border-radius: 999px; color: var(--color-surface); background: var(--color-primary); font-weight: 700; }
+.secondary { color: var(--color-primary); background: var(--color-surface); }
 .list { display: grid; gap: 14px; padding: 0; list-style: none; }
-.card { display: grid; gap: 10px; padding: 22px; border: 1px solid #dce5df; border-radius: 16px; background: white; }
-.card a { color: #276247; font-weight: 750; text-decoration: underline; }
+.card { display: grid; gap: 10px; padding: 22px; border: 1px solid var(--color-border); border-radius: var(--radius-card); background: var(--color-surface); }
+.card a { color: var(--color-primary); font-weight: 750; text-decoration: underline; }
 .stacks { display: flex; gap: 8px; flex-wrap: wrap; padding: 0; list-style: none; }
 .stacks li { padding: 4px 10px; border-radius: 999px; background: #e7f3ee; }
 @media (max-width: 700px) { .search { grid-template-columns: 1fr; } }

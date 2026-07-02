@@ -1,5 +1,14 @@
 :root {
+  --color-primary: #276247;
+  --color-primary-hover: #1d4d37;
+  --color-surface: #fff;
+  --color-border: #dce5df;
   --color-focus: #d28a33;
+  --radius-control: 10px;
+  --radius-card: 16px;
+  --radius-hero: 24px;
+  --control-height: 48px;
+  --space-page: clamp(20px, 4vw, 40px);
 
   color: #17231c;
   background: #f8faf8;

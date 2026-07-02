@@ -1,7 +1,7 @@
-.panel { display: grid; gap: 16px; padding: 20px; border: 1px solid #dce5df; border-radius: 16px; background: white; }
+.panel { display: grid; gap: 16px; padding: 20px; border: 1px solid var(--color-border); border-radius: var(--radius-card); background: var(--color-surface); }
 .form { display: grid; gap: 10px; }
-.form textarea { min-height: 130px; padding: 10px; border: 1px solid #aebdb5; border-radius: 10px; font: inherit; }
-.button { min-height: 44px; padding: 8px 18px; border: 0; border-radius: 999px; color: white; background: #276247; font-weight: 700; }
+.form textarea { min-height: 130px; padding: 10px; border: 1px solid #aebdb5; border-radius: var(--radius-control); font: inherit; }
+.button { min-height: var(--control-height); padding: 8px 18px; border: 0; border-radius: 999px; color: var(--color-surface); background: var(--color-primary); font-weight: 700; }
 .list { display: grid; gap: 12px; padding: 0; list-style: none; }
-.message { display: grid; gap: 4px; padding: 12px; border-radius: 12px; background: #edf5f0; }
+.message { display: grid; gap: 4px; padding: 12px; border-radius: var(--radius-control); background: #edf5f0; }
 .error { color: #a63232; }

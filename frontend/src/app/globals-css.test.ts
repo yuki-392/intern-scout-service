@@ -7,6 +7,14 @@ const authCss = readFileSync(
   resolve(process.cwd(), "src/features/auth/auth-form.module.css"),
   "utf8",
 );
+const componentCss = [
+  "src/app/page.module.css",
+  "src/features/auth/auth-form.module.css",
+  "src/features/conversations/conversations.module.css",
+  "src/features/intern-search/intern-search.module.css",
+  "src/features/job-postings/job-postings.module.css",
+  "src/features/navigation/app-navigation.module.css",
+].map((path) => readFileSync(resolve(process.cwd(), path), "utf8")).join("\n");
 
 describe("global focus styles", () => {
   it("defines the shared focus color token", () => {
@@ -21,5 +29,30 @@ describe("global focus styles", () => {
 
   it("does not override the shared style with an input-only focus rule", () => {
     expect(authCss).not.toMatch(/input:focus(?!-visible)/);
+  });
+});
+
+describe("global design tokens", () => {
+  it.each([
+    ["color-primary", "#276247"],
+    ["color-primary-hover", "#1d4d37"],
+    ["color-surface", "#fff"],
+    ["color-border", "#dce5df"],
+    ["radius-control", "10px"],
+    ["radius-card", "16px"],
+    ["radius-hero", "24px"],
+    ["control-height", "48px"],
+    ["space-page", "clamp(20px, 4vw, 40px)"],
+  ])("defines --%s", (name, value) => {
+    expect(globalCss).toContain(`--${name}: ${value};`);
+  });
+
+  it("uses shared palette tokens in component styles", () => {
+    expect(componentCss).not.toMatch(/#276247|#1d4d37|#dce5df|(?:color|background):\s*(?:#fff|white)\s*;/i);
+  });
+
+  it("removes one-off control heights and corner radii", () => {
+    expect(componentCss).not.toMatch(/min-height:\s*(?:42|44|52)px/);
+    expect(componentCss).not.toMatch(/border-radius:\s*(?:9|12|14|18|22|28)px/);
   });
 });

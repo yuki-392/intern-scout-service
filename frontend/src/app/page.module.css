@@ -2,7 +2,7 @@
   min-height: 100svh;
   display: grid;
   place-items: center;
-  padding: 48px 24px;
+  padding: var(--space-page);
   background:
     radial-gradient(circle at 12% 18%, #e7f3ee 0, transparent 34%),
     radial-gradient(circle at 86% 82%, #f4e9d8 0, transparent 32%),
@@ -12,15 +12,15 @@
 .shell {
   width: min(100%, 720px);
   padding: clamp(32px, 7vw, 72px);
-  border: 1px solid #dce5df;
-  border-radius: 28px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-hero);
   background: rgb(255 255 255 / 88%);
   box-shadow: 0 24px 80px rgb(35 66 49 / 10%);
 }
 
 .eyebrow {
   margin-bottom: 24px;
-  color: #276247;
+  color: var(--color-primary);
   font-size: 0.78rem;
   font-weight: 750;
   letter-spacing: 0.16em;
@@ -29,7 +29,7 @@
 
 .notice {
   padding: 12px 16px;
-  border-radius: 12px;
+  border-radius: var(--radius-control);
   color: #24563e;
   background: #e7f3ee;
   font-weight: 700;
@@ -64,12 +64,12 @@
 }
 
 .actions a {
-  min-height: 52px;
+  min-height: var(--control-height);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   padding: 12px 18px;
-  border: 1px solid #276247;
+  border: 1px solid var(--color-primary);
   border-radius: 999px;
   font-weight: 700;
   text-align: center;
@@ -80,12 +80,12 @@
 }
 
 .primary {
-  color: #fff;
-  background: #276247;
+  color: var(--color-surface);
+  background: var(--color-primary);
 }
 
 .secondary {
-  color: #276247;
+  color: var(--color-primary);
   background: transparent;
 }
 
@@ -97,7 +97,7 @@
 
 .login a {
   margin-left: 0.35em;
-  color: #276247;
+  color: var(--color-primary);
   font-weight: 700;
   text-decoration: underline;
   text-underline-offset: 0.25em;
@@ -109,7 +109,7 @@
   }
 
   .primary:hover {
-    background: #1d4d37;
+    background: var(--color-primary-hover);
   }
 
   .secondary:hover {
@@ -119,11 +119,11 @@
 
 @media (max-width: 560px) {
   .page {
-    padding: 20px;
+    padding: var(--space-page);
   }
 
   .shell {
-    border-radius: 22px;
+    border-radius: var(--radius-hero);
   }
 
   .actions {
