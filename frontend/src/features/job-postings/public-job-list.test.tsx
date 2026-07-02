@@ -20,6 +20,8 @@ describe("PublicJobList", () => {
     render(<PublicJobList page={1} />);
     expect(await screen.findByText("Rails募集")).toBeDefined();
     expect(screen.getByText("応募済み")).toBeDefined();
-    expect(screen.getByRole("link", { name: "募集詳細を見る" }).getAttribute("href")).toBe("/jobs/3");
+    const detailLink = screen.getByRole("link", { name: "募集詳細を見る" });
+    expect(detailLink.getAttribute("href")).toBe("/jobs/3");
+    expect(detailLink.getAttribute("class")).toContain("detailLink");
   });
 });

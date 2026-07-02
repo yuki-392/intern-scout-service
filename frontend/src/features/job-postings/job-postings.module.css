@@ -8,3 +8,21 @@
 .stacks { display: flex; gap: 8px; flex-wrap: wrap; padding: 0; list-style: none; }
 .stacks li { padding: 4px 10px; border-radius: 999px; background: #e7f3ee; }
 .error { color: #a63232; }
+.detailLink {
+  justify-self: start;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  border: 1px solid #276247;
+  border-radius: 999px;
+  color: #fff;
+  background: #276247;
+  font-weight: 700;
+  box-shadow: 0 6px 16px rgb(39 98 71 / 16%);
+  transition: background-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+}
+.detailLink:hover { background: #1f513a; box-shadow: 0 8px 20px rgb(39 98 71 / 22%); transform: translateY(-1px); }
+.detailLink:active { transform: translateY(0); }
+.detailLink:focus-visible { outline: 3px solid #d28a33; outline-offset: 3px; }
