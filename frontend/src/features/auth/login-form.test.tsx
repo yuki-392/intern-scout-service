@@ -40,8 +40,11 @@ describe("LoginForm", () => {
       screen.getByText("セッションの有効期限が切れました。もう一度ログインしてください"),
     ).toBeDefined();
     expect(
-      screen.getByRole("link", { name: "新規登録はこちら" }).getAttribute("href"),
+      screen.getByRole("link", { name: "新規登録" }).getAttribute("href"),
     ).toBe("/signup");
+    const recovery = screen.getByText("パスワードを忘れた方").closest("details");
+    expect(recovery?.hasAttribute("open")).toBe(false);
+    fireEvent.click(screen.getByText("パスワードを忘れた方"));
     expect(
       screen.getByRole("link", { name: "運営窓口へ問い合わせる" }).getAttribute("href"),
     ).toBe("mailto:support@example.com");
@@ -66,6 +69,8 @@ describe("LoginForm", () => {
   it("shows fixed demo guidance when support is not configured", () => {
     render(<LoginForm reason={null} returnTo={null} supportContact={null} />);
 
+    const recovery = screen.getByText("パスワードを忘れた方").closest("details");
+    expect(recovery?.hasAttribute("open")).toBe(false);
     expect(
       screen.getByText(
         "このデモではパスワードを再設定できません。新しいデモ用アカウントをご利用ください",
@@ -90,7 +95,7 @@ describe("LoginForm", () => {
     expect(
       await screen.findByText("メールアドレスまたはパスワードが正しくありません"),
     ).toBeDefined();
-    expect(screen.getByRole("link", { name: "新規登録はこちら" })).toBeDefined();
+    expect(screen.getByRole("link", { name: "新規登録" })).toBeDefined();
   });
 
   it("returns to a safe path after login", async () => {

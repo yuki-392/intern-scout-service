@@ -90,22 +90,24 @@ export function LoginForm({ reason, returnTo, supportContact }: Props) {
       </button>
 
       <div className={styles.links}>
-        <p>
-          アカウントをお持ちでない方は
-          <Link href="/signup">新規登録はこちら</Link>
+        <p className={styles.signupPrompt}>
+          初めての方は<Link href="/signup">新規登録</Link>
         </p>
-        {supportContact ? (
-          <p className={styles.help}>
-            パスワード再設定は準備中です。
-            <a href={supportContact.href}>
-              {supportContact.label}へ問い合わせる
-            </a>
-          </p>
-        ) : (
-          <p className={styles.help}>
-            このデモではパスワードを再設定できません。新しいデモ用アカウントをご利用ください
-          </p>
-        )}
+        <details className={styles.recovery}>
+          <summary>パスワードを忘れた方</summary>
+          {supportContact ? (
+            <p className={styles.help}>
+              パスワード再設定は準備中です。
+              <a href={supportContact.href}>
+                {supportContact.label}へ問い合わせる
+              </a>
+            </p>
+          ) : (
+            <p className={styles.help}>
+              このデモではパスワードを再設定できません。新しいデモ用アカウントをご利用ください
+            </p>
+          )}
+        </details>
       </div>
     </form>
   );

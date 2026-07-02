@@ -144,6 +144,37 @@
   text-underline-offset: 0.25em;
 }
 
+.signupPrompt {
+  text-align: center;
+}
+
+.signupPrompt a {
+  margin-left: 0.35em;
+}
+
+.recovery {
+  padding: 12px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  color: #617068;
+  background: #f8faf8;
+}
+
+.recovery summary {
+  color: #335b47;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.recovery summary:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+.recovery .help {
+  margin-top: 10px;
+}
+
 .notice {
   padding: 12px 14px;
   border-radius: var(--radius-control);
