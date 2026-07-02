@@ -44,6 +44,7 @@ jobs:
     env:
       RAILS_ENV: test
       DATABASE_URL: postgresql://postgres:postgres@localhost:5432/intern_scout_test
+      DEMO_USER_PASSWORD: ci-demo-password
     steps:
       - uses: actions/checkout@v6
       - run: sudo apt-get update && sudo apt-get install --no-install-recommends -y libpq-dev libvips
