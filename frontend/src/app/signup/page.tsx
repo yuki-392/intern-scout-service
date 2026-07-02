@@ -1,4 +1,5 @@
 import { SignupForm } from "../../features/auth/signup-form";
+import { AuthPageGuard } from "../../features/auth/auth-page-guard";
 import type { UserRole } from "../../features/auth/auth-types";
 import styles from "../../features/auth/auth-form.module.css";
 
@@ -18,7 +19,9 @@ export default async function SignupPage({ searchParams }: Props) {
           <h1 id="signup-title">アカウント登録</h1>
           <p className={styles.muted}>利用者種別を選び、必要事項を入力してください。</p>
         </div>
-        <SignupForm initialRole={role} />
+        <AuthPageGuard returnTo={null}>
+          <SignupForm initialRole={role} />
+        </AuthPageGuard>
       </section>
     </main>
   );

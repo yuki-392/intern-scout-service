@@ -1,4 +1,5 @@
 import { LoginForm } from "../../features/auth/login-form";
+import { AuthPageGuard } from "../../features/auth/auth-page-guard";
 import styles from "../../features/auth/auth-form.module.css";
 import { resolveSupportContact } from "../../features/auth/support-contact";
 
@@ -26,11 +27,13 @@ export default async function LoginPage({ searchParams }: Props) {
           <h1 id="login-title">ログイン</h1>
           <p className={styles.muted}>登録したメールアドレスでログインします。</p>
         </div>
-        <LoginForm
-          reason={reason}
-          returnTo={returnTo}
-          supportContact={supportContact}
-        />
+        <AuthPageGuard returnTo={returnTo}>
+          <LoginForm
+            reason={reason}
+            returnTo={returnTo}
+            supportContact={supportContact}
+          />
+        </AuthPageGuard>
       </section>
     </main>
   );
