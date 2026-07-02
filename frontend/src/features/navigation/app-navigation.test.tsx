@@ -38,6 +38,7 @@ describe("AppNavigation", () => {
     fireEvent.click(screen.getByRole("button", { name: "ログアウト" }));
     await waitFor(() => expect(mocks.logoutUser).toHaveBeenCalledTimes(1));
     expect(mocks.replace).toHaveBeenCalledWith("/login");
+    expect(screen.getByRole("button", { name: "ログアウト" }).hasAttribute("disabled")).toBe(false);
   });
 
   it("shows company navigation", async () => {

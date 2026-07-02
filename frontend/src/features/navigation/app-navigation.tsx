@@ -58,6 +58,7 @@ export function AppNavigation() {
       router.replace("/login");
     } catch {
       setError("ログアウトに失敗しました。もう一度お試しください");
+    } finally {
       setLoggingOut(false);
     }
   }
