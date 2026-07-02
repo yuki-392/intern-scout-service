@@ -68,9 +68,8 @@
   resize: vertical;
 }
 
-.field input:focus {
+.field input:focus-visible {
   border-color: #276247;
-  outline: 3px solid rgb(39 98 71 / 18%);
 }
 
 .error {

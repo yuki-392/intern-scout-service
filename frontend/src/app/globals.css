@@ -1,4 +1,6 @@
 :root {
+  --color-focus: #d28a33;
+
   color: #17231c;
   background: #f8faf8;
   font-family:
@@ -32,7 +34,7 @@ a {
   text-decoration: none;
 }
 
-a:focus-visible {
-  outline: 3px solid #d28a33;
-  outline-offset: 4px;
+:where(a, button, input, select, textarea):focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 3px;
 }

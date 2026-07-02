@@ -35,4 +35,3 @@
 }
 .detailLink:hover { background: #1f513a; box-shadow: 0 8px 20px rgb(39 98 71 / 22%); transform: translateY(-1px); }
 .detailLink:active { transform: translateY(0); }
-.detailLink:focus-visible { outline: 3px solid #d28a33; outline-offset: 3px; }

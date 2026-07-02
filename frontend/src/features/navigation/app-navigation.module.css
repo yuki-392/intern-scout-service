@@ -61,11 +61,6 @@
   cursor: pointer;
 }
 
-.logout:focus-visible {
-  outline: 3px solid #d28a33;
-  outline-offset: 4px;
-}
-
 .logout:disabled {
   cursor: wait;
   opacity: 0.65;
@@ -104,12 +99,6 @@
     font: inherit;
     font-weight: 700;
     cursor: pointer;
-  }
-
-  .menuButton:focus-visible,
-  .menuItem:focus-visible {
-    outline: 3px solid #d28a33;
-    outline-offset: 3px;
   }
 
   .menu {
