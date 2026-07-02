@@ -14,6 +14,8 @@ describe("PublicJobList", () => {
     expect(screen.getByText("募集を読み込んでいます")).toBeDefined();
     resolve({ data: [], meta: { current_page: 1, total_pages: 0, total_count: 0, per_page: 20 } });
     expect(await screen.findByText("公開中の募集はありません")).toBeDefined();
+    expect(screen.getByText("新しい募集が公開されるまで、企業に伝わるプロフィールを準備しましょう。")).toBeDefined();
+    expect(screen.getByRole("link", { name: "プロフィールを充実させる" }).getAttribute("href")).toBe("/profile/edit");
   });
   it("shows company title stacks and applied state", async () => {
     mocks.getJobs.mockResolvedValue({ data: [{ id: 3, company_name: "Example", title: "Rails募集", technical_stacks: ["Ruby"], applied: true }], meta: { current_page: 1, total_pages: 1, total_count: 1, per_page: 20 } });

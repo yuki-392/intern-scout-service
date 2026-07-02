@@ -15,6 +15,9 @@ describe("ConversationList", () => {
     expect(screen.getByText("会話を読み込んでいます")).toBeDefined();
     resolve({ data: [], meta: { current_page: 1, total_pages: 0, total_count: 0, per_page: 20 } });
     expect(await screen.findByText("会話はまだありません")).toBeDefined();
+    expect(screen.getByText("スカウトまたは応募をきっかけに会話が始まります。")).toBeDefined();
+    expect(screen.getByRole("link", { name: "プロフィールを充実させる" }).getAttribute("href")).toBe("/profile/edit");
+    expect(screen.getByRole("link", { name: "インターン生を探す" }).getAttribute("href")).toBe("/interns");
   });
 
   it("shows counterpart latest message and detail link", async () => {
