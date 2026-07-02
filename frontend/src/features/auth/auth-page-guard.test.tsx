@@ -1,4 +1,4 @@
-import { render, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { AuthPageGuard } from "./auth-page-guard";
@@ -30,5 +30,17 @@ describe("AuthPageGuard", () => {
 
     await waitFor(() => expect(document.body.textContent).toContain("ログインフォーム"));
     expect(mocks.replace).not.toHaveBeenCalled();
+  });
+
+  it("announces a card-sized loading state while checking authentication", () => {
+    mocks.getCurrentUser.mockReturnValue(new Promise(() => undefined));
+    render(<AuthPageGuard returnTo={null}><p>ログインフォーム</p></AuthPageGuard>);
+
+    const status = screen.getByRole("status");
+    expect(status.getAttribute("aria-live")).toBe("polite");
+    expect(status.getAttribute("aria-busy")).toBe("true");
+    expect(status.className).toContain("loadingState");
+    expect(status.textContent).toContain("ログイン状態を確認しています");
+    expect(screen.queryByText("ログインフォーム")).toBeNull();
   });
 });

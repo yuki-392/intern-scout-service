@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { getCurrentUser } from "./auth-api";
+import styles from "./auth-form.module.css";
 import { safeReturnTo } from "./safe-return-to";
 
 export function AuthPageGuard({
@@ -33,6 +34,14 @@ export function AuthPageGuard({
     };
   }, [returnTo, router]);
 
-  if (!checked) return <p role="status">ログイン状態を確認しています…</p>;
+  if (!checked) {
+    return (
+      <div className={styles.loadingState} role="status" aria-live="polite" aria-busy="true">
+        <span className={styles.spinner} aria-hidden="true" />
+        <p>ログイン状態を確認しています…</p>
+        <p className={styles.loadingHint}>確認が終わるとログイン画面を表示します</p>
+      </div>
+    );
+  }
   return children;
 }

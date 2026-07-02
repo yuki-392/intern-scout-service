@@ -28,6 +28,28 @@ describe("PublicJobDetail", () => {
     render(<PublicJobDetail id={99} />);
     expect(await screen.findByText("募集が見つかりません")).toBeDefined();
   });
+  it("announces a card-sized loading state", () => {
+    mocks.getJob.mockReturnValue(new Promise(() => undefined));
+    render(<PublicJobDetail id={3} />);
+
+    const status = screen.getByRole("status");
+    expect(status.getAttribute("aria-live")).toBe("polite");
+    expect(status.getAttribute("aria-busy")).toBe("true");
+    expect(status.className).toContain("loadingPanel");
+    expect(status.textContent).toContain("募集を読み込んでいます");
+  });
+  it("explains a loading failure and retries", async () => {
+    mocks.getJob.mockRejectedValueOnce({ status: 500 }).mockResolvedValueOnce(job());
+    render(<PublicJobDetail id={3} />);
+
+    const alert = await screen.findByRole("alert");
+    expect(alert.textContent).toContain("募集情報を読み込めませんでした");
+    expect(alert.textContent).toContain("通信状況を確認");
+    fireEvent.click(screen.getByRole("button", { name: "再読み込み" }));
+
+    expect(await screen.findByText("Rails募集")).toBeDefined();
+    expect(mocks.getJob).toHaveBeenCalledTimes(2);
+  });
 });
 
 function job() { return { id: 3, company_name: "Example", title: "Rails募集", description: "開発", work_conditions: "週3日", technical_stacks: ["Ruby"], applied: false }; }

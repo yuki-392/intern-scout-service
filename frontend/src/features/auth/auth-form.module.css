@@ -152,3 +152,39 @@
   background: #fff5df;
   line-height: 1.6;
 }
+
+.loadingState {
+  min-height: 240px;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 12px;
+  color: #173a29;
+  text-align: center;
+}
+
+.loadingState p {
+  margin: 0;
+}
+
+.loadingHint {
+  color: #617068;
+  font-size: 0.9rem;
+}
+
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 4px solid #dce5df;
+  border-top-color: #276247;
+  border-radius: 50%;
+  animation: spin 800ms linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner { animation-duration: 1600ms; }
+}
