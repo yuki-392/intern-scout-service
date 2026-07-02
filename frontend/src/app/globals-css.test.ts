@@ -3,6 +3,7 @@ import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
 const globalCss = readFileSync(resolve(process.cwd(), "src/app/globals.css"), "utf8");
+const pageCss = readFileSync(resolve(process.cwd(), "src/app/page.module.css"), "utf8");
 const authCss = readFileSync(
   resolve(process.cwd(), "src/features/auth/auth-form.module.css"),
   "utf8",
@@ -54,5 +55,19 @@ describe("global design tokens", () => {
   it("removes one-off control heights and corner radii", () => {
     expect(componentCss).not.toMatch(/min-height:\s*(?:42|44|52)px/);
     expect(componentCss).not.toMatch(/border-radius:\s*(?:9|12|14|18|22|28)px/);
+  });
+});
+
+describe("mobile home typography", () => {
+  it("uses a restrained responsive heading size on mobile", () => {
+    expect(pageCss).toMatch(
+      /@media \(max-width: 560px\)[\s\S]*?\.hero h1\s*\{[^}]*font-size:\s*clamp\(2rem, 10vw, 2\.75rem\);/,
+    );
+  });
+
+  it("keeps the mobile card horizontal padding stable", () => {
+    expect(pageCss).toMatch(
+      /@media \(max-width: 560px\)[\s\S]*?\.shell\s*\{[^}]*padding-inline:\s*26px;/,
+    );
   });
 });

@@ -10,7 +10,7 @@ describe("Home", () => {
     expect(
       screen.getByRole("heading", {
         level: 1,
-        name: "挑戦したい学生と、未来をつくる企業をつなぐ",
+        name: "学生の挑戦と、企業の未来をつなぐ",
       }),
     ).toBeDefined();
     expect(
@@ -32,5 +32,18 @@ describe("Home", () => {
     render(await Home({ searchParams: Promise.resolve({ account_deleted: "1" }) }));
 
     expect(screen.getByRole("status").textContent).toContain("アカウントを削除しました");
+  });
+
+  it("学生と企業を同等の選択肢としてメリットとともに案内する", async () => {
+    render(await Home({ searchParams: Promise.resolve({}) }));
+
+    expect(screen.getByRole("heading", { level: 2, name: "学生の方" })).toBeDefined();
+    expect(screen.getByText("プロフィールを公開し、スカウトを受け取ったり募集へ応募できます。")).toBeDefined();
+    expect(screen.getByRole("heading", { level: 2, name: "採用担当者の方" })).toBeDefined();
+    expect(screen.getByText("技術スタックから学生を探し、スカウトや募集掲載を始められます。")).toBeDefined();
+
+    const internLink = screen.getByRole("link", { name: "インターン生として登録" });
+    const companyLink = screen.getByRole("link", { name: "企業担当者として登録" });
+    expect(internLink.className).toBe(companyLink.className);
   });
 });
