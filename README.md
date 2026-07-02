@@ -212,7 +212,7 @@ docker compose run --rm backend bin/bundler-audit check --update
 
 ### 無料デモ環境への公開
 
-- Web: [https://intern-scout-service-1gwnfgvws-yukis-projects-4e18f76e.vercel.app](https://intern-scout-service-1gwnfgvws-yukis-projects-4e18f76e.vercel.app)
+- Web: [https://intern-scout-service.vercel.app](https://intern-scout-service.vercel.app)
 - API: [https://intern-scout-api.onrender.com](https://intern-scout-api.onrender.com)
 
 1. Renderでリポジトリの `render.yaml` をBlueprintとして読み込み、
