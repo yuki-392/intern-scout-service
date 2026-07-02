@@ -17,4 +17,14 @@ describe("CompanyJobList", () => {
     expect(screen.getByText("募集を公開すると、インターン生からの応募を受け付けられます。")).toBeDefined();
     expect(screen.getByRole("link", { name: "新しい募集を作成" }).getAttribute("href")).toBe("/company/jobs/new");
   });
+
+  it("reloads the list after a job is created", async () => {
+    mocks.getJobs.mockResolvedValue([]);
+    const view = render(<CompanyJobList refreshKey="initial" />);
+    await screen.findByText("作成した募集はありません");
+
+    view.rerender(<CompanyJobList refreshKey="3" />);
+
+    await vi.waitFor(() => expect(mocks.getJobs).toHaveBeenCalledTimes(2));
+  });
 });

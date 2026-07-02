@@ -4,6 +4,10 @@ import { describe, expect, it } from "vitest";
 
 const globalCss = readFileSync(resolve(process.cwd(), "src/app/globals.css"), "utf8");
 const pageCss = readFileSync(resolve(process.cwd(), "src/app/page.module.css"), "utf8");
+const jobPostingCss = readFileSync(
+  resolve(process.cwd(), "src/features/job-postings/job-postings.module.css"),
+  "utf8",
+);
 const authCss = readFileSync(
   resolve(process.cwd(), "src/features/auth/auth-form.module.css"),
   "utf8",
@@ -68,6 +72,14 @@ describe("mobile home typography", () => {
   it("keeps the mobile card horizontal padding stable", () => {
     expect(pageCss).toMatch(
       /@media \(max-width: 560px\)[\s\S]*?\.shell\s*\{[^}]*padding-inline:\s*26px;/,
+    );
+  });
+});
+
+describe("job posting empty state", () => {
+  it("centers its primary action", () => {
+    expect(jobPostingCss).toMatch(
+      /\.emptyState \.detailLink\s*\{[^}]*justify-self:\s*center;/,
     );
   });
 });

@@ -6,8 +6,4 @@
 .message { display: grid; gap: 4px; padding: 12px; border-radius: var(--radius-control); background: #edf5f0; }
 .error { color: #a63232; }
 .emptyState { display: grid; gap: 14px; padding: 28px; border: 1px solid var(--color-border); border-radius: var(--radius-card); background: var(--color-surface); text-align: center; }
-.emptyActions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-.emptyActions > div { display: grid; gap: 8px; }
-.emptyActions p { color: #53645b; font-weight: 700; }
-.emptyCta { min-height: var(--control-height); display: inline-flex; align-items: center; justify-content: center; padding: 10px 18px; border-radius: 999px; color: var(--color-surface); background: var(--color-primary); font-weight: 700; }
-@media (max-width: 560px) { .emptyActions { grid-template-columns: 1fr; } }
+.emptyCta { min-height: var(--control-height); display: inline-flex; align-items: center; justify-content: center; justify-self: center; padding: 10px 18px; border-radius: 999px; color: var(--color-surface); background: var(--color-primary); font-weight: 700; }

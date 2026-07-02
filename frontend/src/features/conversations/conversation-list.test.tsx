@@ -1,11 +1,15 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ConversationList } from "./conversation-list";
 
-const mocks = vi.hoisted(() => ({ getConversations: vi.fn() }));
+const mocks = vi.hoisted(() => ({ getConversations: vi.fn(), getCurrentUser: vi.fn() }));
 vi.mock("./conversation-api", () => ({ getConversations: mocks.getConversations }));
+vi.mock("../auth/auth-api", () => ({ getCurrentUser: mocks.getCurrentUser }));
 
 describe("ConversationList", () => {
+  beforeEach(() => {
+    mocks.getCurrentUser.mockResolvedValue({ id: 1, email: "intern@example.com", role: "intern", company: null });
+  });
   afterEach(() => vi.clearAllMocks());
 
   it("shows loading then empty state", async () => {
@@ -17,7 +21,16 @@ describe("ConversationList", () => {
     expect(await screen.findByText("会話はまだありません")).toBeDefined();
     expect(screen.getByText("スカウトまたは応募をきっかけに会話が始まります。")).toBeDefined();
     expect(screen.getByRole("link", { name: "プロフィールを充実させる" }).getAttribute("href")).toBe("/profile/edit");
-    expect(screen.getByRole("link", { name: "インターン生を探す" }).getAttribute("href")).toBe("/interns");
+    expect(screen.queryByRole("link", { name: "インターン生を探す" })).toBeNull();
+  });
+
+  it("shows only the intern search action to a company", async () => {
+    mocks.getCurrentUser.mockResolvedValue({ id: 2, email: "company@example.com", role: "company", company: { id: 1, name: "会社" } });
+    mocks.getConversations.mockResolvedValue({ data: [], meta: { current_page: 1, total_pages: 0, total_count: 0, per_page: 20 } });
+    render(<ConversationList page={1} />);
+
+    expect(await screen.findByRole("link", { name: "インターン生を探す" })).toBeDefined();
+    expect(screen.queryByRole("link", { name: "プロフィールを充実させる" })).toBeNull();
   });
 
   it("shows counterpart latest message and detail link", async () => {

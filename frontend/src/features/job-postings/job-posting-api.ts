@@ -3,7 +3,7 @@ import { notifyIfSessionExpired } from "../auth/session-expiration";
 import type { JobPosting, JobPostingInput, Meta } from "./job-posting-types";
 
 export async function saveCompanyJobPosting(id: number | null, input: JobPostingInput): Promise<JobPosting> {
-  return mutate(id ? `/api/v1/company/job_postings/${id}` : "/api/v1/company/job_postings", id ? "PATCH" : "POST", { job_posting: input });
+  return (await mutate(id ? `/api/v1/company/job_postings/${id}` : "/api/v1/company/job_postings", id ? "PATCH" : "POST", { job_posting: input })).data;
 }
 export async function getCompanyJobPostings(): Promise<JobPosting[]> { return (await request("/api/v1/company/job_postings")).data; }
 export async function getCompanyJobPosting(id: number): Promise<JobPosting> { return (await request(`/api/v1/company/job_postings/${id}`)).data; }

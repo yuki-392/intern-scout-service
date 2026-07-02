@@ -2,9 +2,9 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { JobPostingForm } from "./job-posting-form";
 
-const mocks = vi.hoisted(() => ({ save: vi.fn(), push: vi.fn() }));
+const mocks = vi.hoisted(() => ({ save: vi.fn(), push: vi.fn(), replace: vi.fn() }));
 vi.mock("./job-posting-api", () => ({ saveCompanyJobPosting: mocks.save }));
-vi.mock("next/navigation", () => ({ useRouter: () => ({ push: mocks.push }) }));
+vi.mock("next/navigation", () => ({ useRouter: () => ({ push: mocks.push, replace: mocks.replace }) }));
 
 describe("JobPostingForm", () => {
   afterEach(() => vi.clearAllMocks());
@@ -19,6 +19,7 @@ describe("JobPostingForm", () => {
     fireEvent.click(screen.getByLabelText("公開する"));
     fireEvent.click(screen.getByRole("button", { name: "募集を保存" }));
     await waitFor(() => expect(mocks.save).toHaveBeenCalledWith(null, expect.objectContaining({ title: "Rails募集", status: "published", technical_stacks: ["Ruby"] })));
+    expect(mocks.replace).toHaveBeenCalledWith("/company/jobs?created=3");
   });
   it("shows all errors and prevents duplicate submission", async () => {
     mocks.save.mockReturnValue(new Promise(() => undefined));
@@ -27,5 +28,17 @@ describe("JobPostingForm", () => {
     fireEvent.click(save); fireEvent.click(save);
     await waitFor(() => expect(mocks.save).toHaveBeenCalledTimes(1));
     expect(save.hasAttribute("disabled")).toBe(true);
+  });
+
+  it("announces a successful update without navigating away", async () => {
+    mocks.save.mockResolvedValue({ id: 7 });
+    render(<JobPostingForm posting={{ id: 7, company_name: "Example", title: "募集", description: "開発", work_conditions: "週3日", status: "draft", technical_stacks: [] }} />);
+
+    fireEvent.click(screen.getByRole("button", { name: "募集を保存" }));
+
+    await waitFor(() => expect(mocks.save).toHaveBeenCalledWith(7, expect.any(Object)));
+    expect((await screen.findByRole("status")).textContent).toContain("募集を更新しました");
+    expect(mocks.push).not.toHaveBeenCalled();
+    expect(screen.getByRole("button", { name: "募集を保存" }).hasAttribute("disabled")).toBe(false);
   });
 });
