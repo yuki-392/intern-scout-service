@@ -78,7 +78,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_04_130000) do
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.index ["user_id"], name: "index_intern_profiles_on_user_id", unique: true
-    t.check_constraint "grade::text = ANY (ARRAY['1年'::character varying::text, '2年'::character varying::text, '3年'::character varying::text, '4年'::character varying::text, '5年'::character varying::text, '修士1年'::character varying::text, '修士2年'::character varying::text, '博士課程'::character varying::text, 'その他'::character varying::text])", name: "intern_profiles_grade_check"
+    t.check_constraint "grade::text = ANY (ARRAY['1年'::character varying, '2年'::character varying, '3年'::character varying, '4年'::character varying, '5年'::character varying, '修士1年'::character varying, '修士2年'::character varying, '博士課程'::character varying, 'その他'::character varying]::text[])", name: "intern_profiles_grade_check"
   end
 
   create_table "job_posting_technical_stacks", force: :cascade do |t|
@@ -105,7 +105,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_04_130000) do
     t.text "work_conditions", null: false
     t.index ["company_id"], name: "index_job_postings_on_company_id"
     t.index ["status", "published_at", "id"], name: "index_job_postings_on_status_and_published_at_and_id"
-    t.check_constraint "status::text = ANY (ARRAY['draft'::character varying::text, 'published'::character varying::text])", name: "job_postings_status_check"
+    t.check_constraint "status::text = ANY (ARRAY['draft'::character varying, 'published'::character varying]::text[])", name: "job_postings_status_check"
   end
 
   create_table "login_throttles", force: :cascade do |t|
@@ -128,7 +128,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_04_130000) do
     t.index ["conversation_id", "created_at", "id"], name: "index_messages_on_conversation_id_and_created_at_and_id"
     t.index ["conversation_id"], name: "index_messages_on_conversation_id"
     t.index ["sender_id"], name: "index_messages_on_sender_id"
-    t.check_constraint "kind::text = ANY (ARRAY['scout'::character varying::text, 'normal'::character varying::text, 'application'::character varying::text])", name: "messages_kind_check"
+    t.check_constraint "kind::text = ANY (ARRAY['scout'::character varying, 'normal'::character varying, 'application'::character varying]::text[])", name: "messages_kind_check"
   end
 
   create_table "technical_stacks", force: :cascade do |t|
@@ -151,7 +151,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_04_130000) do
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_digest"], name: "index_users_on_reset_password_digest", unique: true
-    t.check_constraint "role::text = ANY (ARRAY['intern'::character varying::text, 'company'::character varying::text])", name: "users_role_check"
+    t.check_constraint "role::text = ANY (ARRAY['intern'::character varying, 'company'::character varying]::text[])", name: "users_role_check"
   end
 
   add_foreign_key "applications", "companies"

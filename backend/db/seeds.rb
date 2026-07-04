@@ -69,11 +69,23 @@ module DemoSeeds
     end
 
     Message.find_or_create_by!(conversation:, sender: company_user, kind: "scout", body: "プロフィールを拝見し、ぜひ一度お話ししたいと思いました。")
-    application_message = Message.find_or_create_by!(conversation:, sender: intern, kind: "application", body: "募集内容に興味を持ち応募しました。よろしくお願いします。")
+    application_body = "募集『Rails API開発インターン』に応募しました。プロフィールをご確認ください。"
+    application_message = Message.where(conversation:, sender: intern, kind: "application")
+      .where(body: [ application_body, "募集内容に興味を持ち応募しました。よろしくお願いします。" ])
+      .first_or_initialize
+    application_message.update!(body: application_body)
     Application.find_or_create_by!(job_posting: postings.fetch("Rails API開発インターン"), intern_user: intern) do |application|
       application.conversation = conversation
       application.message = application_message
     end
+
+    startup_user = companies.fetch("startup@demo.example").user
+    data_intern = interns.fetch("data-intern@demo.example")
+    startup_conversation = Conversation.find_or_create_by!(company_user: startup_user, intern_user: data_intern) do |item|
+      item.last_messaged_at = Time.current
+    end
+    Message.find_or_create_by!(conversation: startup_conversation, sender: startup_user, kind: "scout", body: "データ分析のご経験に興味を持ちました。プロダクト改善について一度お話ししませんか。")
+    Message.find_or_create_by!(conversation: startup_conversation, sender: data_intern, kind: "normal", body: "ありがとうございます。ぜひ詳しい業務内容を伺いたいです。")
   end
 
   def upsert_user(email:, role:)

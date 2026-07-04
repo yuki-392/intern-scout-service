@@ -20,10 +20,16 @@ class SeedsTest < ActiveSupport::TestCase
     assert_equal 3, JobPosting.joins(company: :user).where(users: { email: SEED_EMAILS }, status: "published").count
     assert TechnicalStack.where(normalized_name: %w[rails react python]).count >= 3
 
+    companies = Company.where(user: users.where(role: "company"))
+    assert_equal 2, companies.where.not(description: [ nil, "" ]).count
+    assert_equal 2, companies.where.not(website_url: [ nil, "" ]).count
+
     conversations = Conversation.where(company_user: users, intern_user: users)
+    assert_equal 2, conversations.count
     assert conversations.joins(:messages).where(messages: { kind: "scout" }).exists?
     assert conversations.joins(:messages).where(messages: { kind: "application" }).exists?
     assert Application.where(intern_user: users).exists?
+    assert Message.exists?(kind: "application", body: "募集『Rails API開発インターン』に応募しました。プロフィールをご確認ください。")
   end
 
   test "is idempotent" do
