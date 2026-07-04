@@ -33,4 +33,14 @@ describe("job-posting-api", () => {
     expect(result).toEqual(saved);
     expect(fetchMock.mock.calls.some(([path, options]) => path === "/api/v1/company/job_postings/3" && options?.method === "PATCH")).toBe(true);
   });
+
+  it("fetches the requested company posting page without caching", async () => {
+    const payload = { data: [], meta: { current_page: 2, total_pages: 2, total_count: 21, per_page: 20 } };
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValue(new Response(JSON.stringify(payload), { status: 200, headers: { "Content-Type": "application/json" } }));
+    vi.stubGlobal("fetch", fetchMock);
+    const { getCompanyJobPostings } = await import("./job-posting-api");
+
+    expect(await getCompanyJobPostings(2)).toEqual(payload);
+    expect(fetchMock).toHaveBeenCalledWith("/api/v1/company/job_postings?page=2", { cache: "no-store", credentials: "same-origin" });
+  });
 });

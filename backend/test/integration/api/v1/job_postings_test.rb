@@ -16,6 +16,21 @@ class ApiV1JobPostingsTest < ActionDispatch::IntegrationTest
     assert_equal "更新", posting.reload.title
   end
 
+  test "company posting list paginates twenty at a time" do
+    company = create_company("company@example.com", "Example")
+    21.times { |index| create_posting(company, title: "自社募集#{index}") }
+    sign_in(company.user)
+
+    get "/api/v1/company/job_postings", params: { page: 2 }
+
+    assert_response :success
+    assert_equal 1, response.parsed_body.fetch("data").size
+    assert_equal 2, response.parsed_body.dig("meta", "current_page")
+    assert_equal 2, response.parsed_body.dig("meta", "total_pages")
+    assert_equal 21, response.parsed_body.dig("meta", "total_count")
+    assert_equal 20, response.parsed_body.dig("meta", "per_page")
+  end
+
   test "company cannot view or update another company posting" do
     owner = create_company("owner@example.com", "Owner")
     posting = create_posting(owner)

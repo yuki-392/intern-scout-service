@@ -5,7 +5,7 @@ import type { JobPosting, JobPostingInput, Meta } from "./job-posting-types";
 export async function saveCompanyJobPosting(id: number | null, input: JobPostingInput): Promise<JobPosting> {
   return (await mutate(id ? `/api/v1/company/job_postings/${id}` : "/api/v1/company/job_postings", id ? "PATCH" : "POST", { job_posting: input })).data;
 }
-export async function getCompanyJobPostings(): Promise<JobPosting[]> { return (await request("/api/v1/company/job_postings")).data; }
+export async function getCompanyJobPostings(page: number): Promise<{ data: JobPosting[]; meta: Meta }> { return request(`/api/v1/company/job_postings?page=${page}`); }
 export async function getCompanyJobPosting(id: number): Promise<JobPosting> { return (await request(`/api/v1/company/job_postings/${id}`)).data; }
 export async function getPublicJobPostings(page: number): Promise<{ data: JobPosting[]; meta: Meta }> { return request(`/api/v1/job_postings?page=${page}`); }
 export async function getPublicJobPosting(id: number): Promise<JobPosting> { return (await request(`/api/v1/job_postings/${id}`)).data; }

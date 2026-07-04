@@ -179,6 +179,8 @@ production環境ではSMTP関連の環境変数を設定してください。
   - 利用者種別の選択前と入力中の両方に、既存アカウント向けのログイン導線を表示します。
 - 公開募集一覧をURLでページ移動できるようにする
   - APIのpagination metadataを保持し、21件目以降へ進める前後リンクと現在ページを表示します。
+- 自社募集一覧を20件単位でページ移動できるようにする
+  - 安定した更新順でAPIの総件数とページ情報を返し、21件目以降へ進めるURLリンクを表示します。
 - 会話の古い履歴へ移動できるようにする
   - 50件より古いメッセージがある場合、pagination metadataから過去ページへのURLリンクを表示します。
 - 機能単位でTDDを行う
@@ -210,9 +212,9 @@ production環境ではSMTP関連の環境変数を設定してください。
 | 状態 | コマンド | テスト範囲 |
 |---|---|---|
 | GREEN | `npm --prefix frontend run test -- src/app/page.test.tsx` | トップ画面の見出し、登録・ログイン導線 |
-| GREEN | `npm --prefix frontend run test` | 全112件。既存導線に加え、公開募集・会話履歴のページ移動、パスワード再設定、公開デモの個人情報警告を検証 |
+| GREEN | `npm --prefix frontend run test` | 全114件。既存導線に加え、自社募集・公開募集・会話履歴のページ移動、パスワード再設定、公開デモの個人情報警告を検証 |
 | GREEN | Railsテストコマンドの末尾に `test/integration/api/v1/health_test.rb` を指定 | APIヘルスチェック |
-| 要CI確認 | 下記のRailsテストコマンド | 全103件。既存導線に加え、公開募集のN+1防止、session世代、login制限、デモ登録制限、password再設定を検証 |
+| 要CI確認 | 下記のRailsテストコマンド | 全104件。既存導線に加え、自社募集のページ移動、公開募集のN+1防止、session世代、login制限、デモ登録制限、password再設定を検証 |
 | GREEN | Railsの `db:rollback STEP=1` 後に `db:migrate` | プロフィール関連migrationのロールバックと再適用 |
 | 要CI確認 | `docker compose run --rm backend bin/rails zeitwerk:check` | Railsの自動読み込み整合性 |
 | 要CI確認 | `docker compose run --rm backend bin/rubocop` | Rubyコード規約 |
