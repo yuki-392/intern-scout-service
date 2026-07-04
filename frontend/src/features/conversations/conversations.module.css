@@ -4,6 +4,7 @@
 .button { min-height: var(--control-height); padding: 8px 18px; border: 0; border-radius: 999px; color: var(--color-surface); background: var(--color-primary); font-weight: 700; }
 .list { display: grid; gap: 12px; padding: 0; list-style: none; }
 .message { display: grid; gap: 4px; padding: 12px; border-radius: var(--radius-control); background: #edf5f0; }
+.historyLink { min-height: var(--control-height); display: inline-flex; align-items: center; justify-content: center; justify-self: start; padding: 8px 18px; border: 1px solid var(--color-primary); border-radius: 999px; color: var(--color-primary); background: var(--color-surface); font-weight: 700; }
 .error { color: #a63232; }
 .emptyState { display: grid; gap: 14px; padding: 28px; border: 1px solid var(--color-border); border-radius: var(--radius-card); background: var(--color-surface); text-align: center; }
 .emptyCta { min-height: var(--control-height); display: inline-flex; align-items: center; justify-content: center; justify-self: center; padding: 10px 18px; border-radius: 999px; color: var(--color-surface); background: var(--color-primary); font-weight: 700; }

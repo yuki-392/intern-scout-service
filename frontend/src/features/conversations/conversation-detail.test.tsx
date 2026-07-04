@@ -13,6 +13,14 @@ describe("ConversationDetail", () => {
     render(<ConversationDetail id={3} page={1} />);
     const messages = await screen.findAllByTestId("message");
     expect(messages.map((item) => item.textContent)).toEqual(["Example Inc.はじめまして", "たかしよろしくお願いします"]);
+    expect(screen.queryByRole("link", { name: "過去のメッセージを見る" })).toBeNull();
+  });
+
+  it("links to the next history page when older messages remain", async () => {
+    mocks.getConversation.mockResolvedValue({ ...detail(), meta: { current_page: 1, total_pages: 2, total_count: 51, per_page: 50 } });
+    render(<ConversationDetail id={3} page={1} />);
+
+    expect((await screen.findByRole("link", { name: "過去のメッセージを見る" })).getAttribute("href")).toBe("/conversations/3?page=2");
   });
 
   it("appends sent message and clears body", async () => {
