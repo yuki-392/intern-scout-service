@@ -37,7 +37,9 @@ describe("ConversationList", () => {
     mocks.getConversations.mockResolvedValue({ data: [{ id: 3, counterpart_name: "たかし", latest_message_excerpt: "はじめまして", latest_message_kind: "scout", latest_sender_name: "Example Inc.", last_messaged_at: "2026-07-01T00:00:00Z" }], meta: { current_page: 1, total_pages: 1, total_count: 1, per_page: 20 } });
     render(<ConversationList page={1} />);
     expect(await screen.findByText("はじめまして")).toBeDefined();
-    expect(screen.getByRole("link", { name: "たかしとの会話を開く" }).getAttribute("href")).toBe("/conversations/3");
+    const detailLink = screen.getByRole("link", { name: "たかしとの会話を開く" });
+    expect(detailLink.getAttribute("href")).toBe("/conversations/3");
+    expect(detailLink.className).toContain("conversationLink");
   });
 
   it("offers retry after failure", async () => {

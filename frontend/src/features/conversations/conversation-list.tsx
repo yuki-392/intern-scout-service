@@ -54,5 +54,5 @@ export function ConversationList({ page }: { page: number }) {
       </section>
     );
   }
-  return <div><ul className={styles.list}>{data.map((item) => <li className={styles.panel} key={item.id}><h2>{item.counterpart_name}</h2><p>{item.latest_sender_name}: <span>{item.latest_message_excerpt}</span></p><Link href={`/conversations/${item.id}`}>{item.counterpart_name}との会話を開く</Link></li>)}</ul>{meta && <p>{meta.current_page} / {meta.total_pages}ページ</p>}</div>;
+  return <div><ul className={styles.list}>{data.map((item) => <li className={styles.panel} key={item.id}><h2>{item.counterpart_name}</h2><p>{item.latest_sender_name}: <span>{item.latest_message_excerpt}</span></p><Link className={styles.conversationLink} href={`/conversations/${item.id}`}>{item.counterpart_name}との会話を開く</Link></li>)}</ul>{meta && <p>{meta.current_page} / {meta.total_pages}ページ</p>}</div>;
 }
