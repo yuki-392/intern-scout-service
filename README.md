@@ -149,6 +149,8 @@ production環境ではSMTP関連の環境変数を設定してください。
   - 操作状態が必要なformだけClient Componentにし、ブラウザへ送るJavaScriptを抑えます。
 - 認証切れを共通処理する
   - 保護APIの401を共通イベントへ集約し、元画面を保持したログイン導線へ戻します。
+- API通信とCSRF再試行を共通化する
+  - mutationは機能を問わずCSRF token失効時に1回だけ再取得・再送し、エラー形式も同じ形へ揃えます。
 - 認証済み利用者を認証画面で詰まらせない
   - ログイン・登録画面の表示前にセッションを確認し、利用者種別に応じた画面へ自動遷移します。
 - モバイルの主要操作を下部ナビへ分離する
@@ -212,7 +214,7 @@ production環境ではSMTP関連の環境変数を設定してください。
 | 状態 | コマンド | テスト範囲 |
 |---|---|---|
 | GREEN | `npm --prefix frontend run test -- src/app/page.test.tsx` | トップ画面の見出し、登録・ログイン導線 |
-| GREEN | `npm --prefix frontend run test` | 全114件。既存導線に加え、自社募集・公開募集・会話履歴のページ移動、パスワード再設定、公開デモの個人情報警告を検証 |
+| GREEN | `npm --prefix frontend run test` | 全117件。既存導線に加え、共通API通信のCSRF再試行上限とエラー統一、自社募集・公開募集・会話履歴のページ移動、パスワード再設定、公開デモの個人情報警告を検証 |
 | GREEN | Railsテストコマンドの末尾に `test/integration/api/v1/health_test.rb` を指定 | APIヘルスチェック |
 | 要CI確認 | 下記のRailsテストコマンド | 全104件。既存導線に加え、自社募集のページ移動、公開募集のN+1防止、session世代、login制限、デモ登録制限、password再設定を検証 |
 | GREEN | Railsの `db:rollback STEP=1` 後に `db:migrate` | プロフィール関連migrationのロールバックと再適用 |

@@ -2,10 +2,12 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
   prefetchCsrfToken: vi.fn(async () => "csrf-token"),
+  clearCsrfToken: vi.fn(),
 }));
 
-vi.mock("../auth/auth-api", () => ({
+vi.mock("../api/csrf", () => ({
   prefetchCsrfToken: mocks.prefetchCsrfToken,
+  clearCsrfToken: mocks.clearCsrfToken,
 }));
 
 describe("intern-profile-api", () => {
