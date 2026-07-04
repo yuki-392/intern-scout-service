@@ -25,5 +25,15 @@ describe("PublicJobList", () => {
     const detailLink = screen.getByRole("link", { name: "募集詳細を見る" });
     expect(detailLink.getAttribute("href")).toBe("/jobs/3");
     expect(detailLink.getAttribute("class")).toContain("detailLink");
+    expect(screen.queryByRole("link", { name: "前へ" })).toBeNull();
+    expect(screen.queryByRole("link", { name: "次へ" })).toBeNull();
+  });
+  it("shows URL-based previous and next page links from metadata", async () => {
+    mocks.getJobs.mockResolvedValue({ data: [{ id: 21, company_name: "Example", title: "Next募集", technical_stacks: [], applied: false }], meta: { current_page: 2, total_pages: 3, total_count: 41, per_page: 20 } });
+    render(<PublicJobList page={2} />);
+
+    expect(await screen.findByText("2 / 3ページ")).toBeDefined();
+    expect(screen.getByRole("link", { name: "前へ" }).getAttribute("href")).toBe("/jobs?page=1");
+    expect(screen.getByRole("link", { name: "次へ" }).getAttribute("href")).toBe("/jobs?page=3");
   });
 });
