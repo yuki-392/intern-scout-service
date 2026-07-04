@@ -48,6 +48,14 @@ describe("InternProfileForm", () => {
     expect(screen.getByLabelText("希望職種")).toBeDefined();
   });
 
+  it("warns demo users not to enter real profile information", async () => {
+    mocks.getInternProfile.mockResolvedValue(null);
+
+    render(<InternProfileForm demoMode />);
+
+    expect(await screen.findByText(/実在する氏名・学校名・経歴/)).toBeDefined();
+  });
+
   it("shows an existing profile and the bio character count", async () => {
     mocks.getInternProfile.mockResolvedValue(profileResponse());
 

@@ -33,6 +33,9 @@ describe("SignupForm", () => {
     expect(
       screen.getByRole("button", { name: "企業担当者として登録" }),
     ).toBeDefined();
+    const loginLink = screen.getByRole("link", { name: "ログイン" });
+    expect(loginLink.getAttribute("href")).toBe("/login");
+    expect(loginLink.className).toContain("loginButton");
     expect(mocks.prefetchCsrfToken).not.toHaveBeenCalled();
 
     fireEvent.click(
@@ -42,6 +45,7 @@ describe("SignupForm", () => {
     expect(screen.getByLabelText("メールアドレス")).toBeDefined();
     expect(screen.getByLabelText("パスワード")).toBeDefined();
     expect(screen.getByLabelText("パスワード（確認）")).toBeDefined();
+    expect(screen.getByRole("link", { name: "ログイン" }).getAttribute("href")).toBe("/login");
     await waitFor(() => {
       expect(mocks.prefetchCsrfToken).toHaveBeenCalledTimes(1);
     });
@@ -61,9 +65,9 @@ describe("SignupForm", () => {
   });
 
   it("warns demo users not to enter real personal information", () => {
-    render(<SignupForm initialRole="intern" demoMode />);
+    render(<SignupForm initialRole={null} demoMode />);
 
-    expect(screen.getByText(/実在する個人情報は入力せず/)).toBeDefined();
+    expect(screen.getByText(/実在する氏名・学校名・経歴/)).toBeDefined();
     expect(screen.getByText(/\.example/)).toBeDefined();
   });
 

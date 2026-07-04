@@ -9,7 +9,13 @@ import { SESSION_EXPIRED_EVENT, sessionExpiredLoginPath } from "../auth/session-
 import type { CurrentUser } from "../auth/auth-types";
 import styles from "./app-navigation.module.css";
 
-const PUBLIC_PATHS = new Set(["/", "/login", "/signup"]);
+const PUBLIC_PATHS = new Set([
+  "/",
+  "/login",
+  "/signup",
+  "/forgot-password",
+  "/reset-password",
+]);
 
 export function AppNavigation() {
   const pathname = usePathname();

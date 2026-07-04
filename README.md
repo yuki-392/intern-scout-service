@@ -103,6 +103,12 @@ docker compose down
 development環境の再設定メールは外部送信せず、`backend/tmp/mails` に保存します。
 production環境ではSMTP関連の環境変数を設定してください。
 
+### 公開デモの入力ルール
+
+`DEMO_MODE=true` の環境は機能確認用です。登録・プロフィール入力には架空データだけを
+使用し、実在する氏名、学校名、経歴、メールアドレスなどの個人情報を入力しないでください。
+メールアドレスは予約済みの `.example` ドメインだけを受け付けます。
+
 ## 実装した機能
 
 - [x] Next.js・Rails・PostgreSQLの初期構築
@@ -167,6 +173,8 @@ production環境ではSMTP関連の環境変数を設定してください。
   - 保存中はボタン表示を切り替え、更新成功後は同じ画面で完了メッセージを支援技術にも通知します。
 - ログイン画面の補助情報を段階表示する
   - 新規登録は短い1行にし、パスワード再設定と問い合わせ先は必要な場合だけ開ける情報ボックスへ分離します。
+- 登録画面からログインへ戻れるようにする
+  - 利用者種別の選択前と入力中の両方に、既存アカウント向けのログイン導線を表示します。
 - 機能単位でTDDを行う
   - 詳細設計、REDテスト、最小実装、リファクタリング、全体検証の順で進めます。
 - 退会時は共有履歴を保持して個人情報を匿名化する
@@ -196,7 +204,7 @@ production環境ではSMTP関連の環境変数を設定してください。
 | 状態 | コマンド | テスト範囲 |
 |---|---|---|
 | GREEN | `npm --prefix frontend run test -- src/app/page.test.tsx` | トップ画面の見出し、登録・ログイン導線 |
-| GREEN | `npm --prefix frontend run test` | 全105件。既存導線に加え、パスワード再設定と公開デモの個人情報警告を検証 |
+| GREEN | `npm --prefix frontend run test` | 全110件。既存導線に加え、パスワード再設定と公開デモの個人情報警告を検証 |
 | GREEN | Railsテストコマンドの末尾に `test/integration/api/v1/health_test.rb` を指定 | APIヘルスチェック |
 | 要CI確認 | 下記のRailsテストコマンド | 全102件。既存導線に加え、session世代、login制限、デモ登録制限、password再設定を検証 |
 | GREEN | Railsの `db:rollback STEP=1` 後に `db:migrate` | プロフィール関連migrationのロールバックと再適用 |

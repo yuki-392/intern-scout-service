@@ -88,4 +88,16 @@ describe("AppNavigation", () => {
     expect(container.innerHTML).toBe("");
     expect(mocks.getCurrentUser).not.toHaveBeenCalled();
   });
+
+  it.each(["/forgot-password", "/reset-password"])(
+    "does not treat the public password reset page %s as an expired session",
+    (pathname) => {
+      mocks.pathname = pathname;
+      const { container } = render(<AppNavigation />);
+
+      expect(container.innerHTML).toBe("");
+      expect(mocks.getCurrentUser).not.toHaveBeenCalled();
+      expect(mocks.replace).not.toHaveBeenCalled();
+    },
+  );
 });

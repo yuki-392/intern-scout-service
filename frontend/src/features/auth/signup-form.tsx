@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -64,32 +65,32 @@ export function SignupForm({ initialRole, demoMode = false }: Props) {
 
   if (!role) {
     return (
-      <div className={styles.choices}>
-        <button
-          className={styles.primary}
-          type="button"
-          onClick={() => chooseRole("intern")}
-        >
-          インターン生として登録
-        </button>
-        <button
-          className={styles.secondary}
-          type="button"
-          onClick={() => chooseRole("company")}
-        >
-          企業担当者として登録
-        </button>
+      <div className={styles.form}>
+        <DemoNotice visible={demoMode} />
+        <div className={styles.choices}>
+          <button
+            className={styles.primary}
+            type="button"
+            onClick={() => chooseRole("intern")}
+          >
+            インターン生として登録
+          </button>
+          <button
+            className={styles.secondary}
+            type="button"
+            onClick={() => chooseRole("company")}
+          >
+            企業担当者として登録
+          </button>
+        </div>
+        <LoginPrompt />
       </div>
     );
   }
 
   return (
     <form className={styles.form} onSubmit={handleSubmit} noValidate>
-      {demoMode && (
-        <p className={styles.notice}>
-          公開デモです。実在する個人情報は入力せず、メールアドレスは.exampleで終わる架空のものを使用してください。
-        </p>
-      )}
+      <DemoNotice visible={demoMode} />
       <p className={styles.muted}>
         {role === "intern" ? "インターン生" : "企業担当者"}として登録します
       </p>
@@ -158,7 +159,27 @@ export function SignupForm({ initialRole, demoMode = false }: Props) {
       <button className={styles.primary} type="submit" disabled={isSubmitting}>
         {isSubmitting ? "作成中…" : "アカウントを作成"}
       </button>
+      <LoginPrompt />
     </form>
+  );
+}
+
+function LoginPrompt() {
+  return (
+    <p className={styles.loginPrompt}>
+      <span>アカウントをお持ちの方はこちら</span>
+      <Link className={styles.loginButton} href="/login">ログイン</Link>
+    </p>
+  );
+}
+
+function DemoNotice({ visible }: { visible: boolean }) {
+  if (!visible) return null;
+
+  return (
+    <p className={styles.notice}>
+      公開デモです。実在する氏名・学校名・経歴などの個人情報は入力せず、メールアドレスは.exampleで終わる架空のものを使用してください。
+    </p>
   );
 }
 

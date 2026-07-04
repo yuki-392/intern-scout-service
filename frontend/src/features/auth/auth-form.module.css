@@ -152,6 +152,36 @@
   margin-left: 0.35em;
 }
 
+.loginPrompt {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding-top: 4px;
+  color: #617068;
+  font-size: 0.95rem;
+  text-align: center;
+}
+
+.loginButton {
+  min-width: 160px;
+  min-height: var(--control-height);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  border: 1px solid var(--color-primary);
+  border-radius: 999px;
+  color: var(--color-primary);
+  background: var(--color-surface);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.loginButton:hover {
+  color: var(--color-surface);
+  background: var(--color-primary-hover);
+}
+
 .recovery {
   padding: 12px 14px;
   border: 1px solid var(--color-border);

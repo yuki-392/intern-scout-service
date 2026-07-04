@@ -9,7 +9,7 @@ import { getInternProfile, saveInternProfile } from "./intern-profile-api";
 const grades = ["1年", "2年", "3年", "4年", "5年", "修士1年", "修士2年", "博士課程", "その他"];
 const empty = { display_name: "", school_name: "", grade: "", bio: "", desired_role: "", technical_stacks: [] as string[] };
 
-export function InternProfileForm() {
+export function InternProfileForm({ demoMode = false }: { demoMode?: boolean }) {
   const [values, setValues] = useState(empty);
   const [loading, setLoading] = useState(true);
   const [loadFailed, setLoadFailed] = useState(false);
@@ -72,6 +72,7 @@ export function InternProfileForm() {
 
   const fieldErrors = (field: string) => errors.filter((error) => error.field === field);
   return <form className={styles.form} onSubmit={submit} noValidate>
+    {demoMode && <p className={styles.notice}>公開デモです。実在する氏名・学校名・経歴などの個人情報は入力しないでください。</p>}
     {errors.length > 0 && <div className={styles.summary} role="alert" tabIndex={-1} ref={summaryRef}>入力内容を確認してください<ul>{errors.map((error, i) => <li key={i}>{error.message}</li>)}</ul></div>}
     {message && <p className={message.startsWith("通信") ? styles.summary : styles.notice}>{message}</p>}
     <TextField label="表示名" value={values.display_name} maxLength={50} errors={fieldErrors("display_name")} onChange={(v) => change("display_name", v)} />

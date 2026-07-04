@@ -1,6 +1,7 @@
 import { SignupForm } from "../../features/auth/signup-form";
 import { AuthPageGuard } from "../../features/auth/auth-page-guard";
 import type { UserRole } from "../../features/auth/auth-types";
+import { isDemoMode } from "../../features/auth/demo-mode";
 import styles from "../../features/auth/auth-form.module.css";
 
 type Props = {
@@ -20,7 +21,7 @@ export default async function SignupPage({ searchParams }: Props) {
           <p className={styles.muted}>利用者種別を選び、必要事項を入力してください。</p>
         </div>
         <AuthPageGuard returnTo={null}>
-          <SignupForm initialRole={role} demoMode={process.env.DEMO_MODE === "true"} />
+          <SignupForm initialRole={role} demoMode={isDemoMode(process.env.DEMO_MODE)} />
         </AuthPageGuard>
       </section>
     </main>
