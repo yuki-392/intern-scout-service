@@ -1,4 +1,8 @@
+require "digest"
+require "securerandom"
+
 class User < ApplicationRecord
+  PASSWORD_RESET_TTL = 30.minutes
   has_secure_password
 
   has_one :company, dependent: :destroy
@@ -20,6 +24,41 @@ class User < ApplicationRecord
   validate :password_within_bcrypt_limit
 
   scope :active, -> { where(deleted_at: nil) }
+
+  def issue_password_reset_token!
+    token = SecureRandom.urlsafe_base64(32)
+    update!(reset_password_digest: self.class.password_reset_digest(token), reset_password_sent_at: Time.current)
+    token
+  end
+
+  def valid_password_reset_token?(token)
+    return false if reset_password_digest.blank? || reset_password_sent_at.blank?
+    return false if reset_password_sent_at < PASSWORD_RESET_TTL.ago
+
+    ActiveSupport::SecurityUtils.secure_compare(
+      reset_password_digest,
+      self.class.password_reset_digest(token.to_s)
+    )
+  end
+
+  def consume_password_reset!(token:, password:, password_confirmation:)
+    return false if password.blank?
+
+    with_lock do
+      return false unless valid_password_reset_token?(token)
+
+      self.password = password
+      self.password_confirmation = password_confirmation
+      self.reset_password_digest = nil
+      self.reset_password_sent_at = nil
+      self.session_version += 1
+      save
+    end
+  end
+
+  def self.password_reset_digest(token)
+    Digest::SHA256.hexdigest(token)
+  end
 
   private
 

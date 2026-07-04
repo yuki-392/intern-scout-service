@@ -60,6 +60,13 @@ describe("SignupForm", () => {
     expect(screen.getByLabelText("メールアドレス")).toBeDefined();
   });
 
+  it("warns demo users not to enter real personal information", () => {
+    render(<SignupForm initialRole="intern" demoMode />);
+
+    expect(screen.getByText(/実在する個人情報は入力せず/)).toBeDefined();
+    expect(screen.getByText(/\.example/)).toBeDefined();
+  });
+
   it("preserves role inputs but omits company name from intern registration", async () => {
     mocks.registerUser.mockResolvedValue({
       id: 1,

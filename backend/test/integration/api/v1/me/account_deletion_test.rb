@@ -16,6 +16,7 @@ class ApiV1MeAccountDeletionTest < ActionDispatch::IntegrationTest
     conversation, message, application = create_application_history(company, posting, intern)
     original_email = intern.email
     original_digest = intern.password_digest
+    original_session_version = intern.session_version
     sign_in(intern)
 
     delete_account("password123")
@@ -27,6 +28,7 @@ class ApiV1MeAccountDeletionTest < ActionDispatch::IntegrationTest
     assert_not_equal original_email, intern.email
     assert_match(/@deleted\.invalid\z/, intern.email)
     assert_not_equal original_digest, intern.password_digest
+    assert_operator intern.session_version, :>, original_session_version
     assert Conversation.exists?(conversation.id)
     assert Message.exists?(message.id)
     assert Application.exists?(application.id)

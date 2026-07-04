@@ -16,7 +16,8 @@ module Accounts
         user.update!(
           email: "deleted-#{user.id}-#{SecureRandom.hex(16)}@deleted.invalid",
           password: SecureRandom.hex(32),
-          deleted_at: Time.current
+          deleted_at: Time.current,
+          session_version: user.session_version + 1
         )
       end
 

@@ -90,10 +90,18 @@ docker compose down
 | Rails実行環境 | `DATABASE_URL` | PostgreSQL接続情報 |
 | Rails実行環境 | `DEMO_USER_PASSWORD` | 架空のseedアカウントに設定する共通パスワード |
 | Rails実行環境 | `LOAD_DEMO_SEEDS` | `true` の場合、コンテナ起動時に架空データを再投入する |
+| Rails / Next.js | `DEMO_MODE` | `true` の公開デモでは `.example` の架空メールだけ登録可能にする |
+| Rails実行環境 | `FRONTEND_ORIGIN` | パスワード再設定リンクの送信先origin |
+| Rails実行環境 | `SMTP_ADDRESS` / `SMTP_PORT` | 再設定メール用SMTPサーバー |
+| Rails実行環境 | `SMTP_USERNAME` / `SMTP_PASSWORD` | SMTP認証情報 |
+| Rails実行環境 | `MAIL_FROM` | 再設定メールの送信元 |
 
-問い合わせ先が未設定または不正な場合、ログイン画面にはリンクを作らず、デモ用の
-固定案内を表示します。秘密情報は `.env` やホスティングサービスの環境変数で管理し、
-Gitへ登録しません。
+問い合わせ先が未設定または不正な場合も、パスワード再設定への導線は表示し、
+問い合わせリンクだけを省略します。秘密情報は `.env` やホスティングサービスの
+環境変数で管理し、Gitへ登録しません。
+
+development環境の再設定メールは外部送信せず、`backend/tmp/mails` に保存します。
+production環境ではSMTP関連の環境変数を設定してください。
 
 ## 実装した機能
 
@@ -106,7 +114,7 @@ Gitへ登録しません。
 - [x] 企業担当者のアカウント登録
 - [x] ログイン・ログアウト・Cookieセッション管理
 - [x] 利用者種別別の共通ナビゲーション・セッション切れ導線
-- [ ] パスワード再設定
+- [x] 有効期限付き・一回限りのパスワード再設定
 - [x] インターン生プロフィールの登録・編集・自動掲載
 - [x] 企業向けインターン生一覧・詳細
 - [x] 学校名・希望職種・技術スタックによる検索
@@ -158,7 +166,7 @@ Gitへ登録しません。
 - 募集編集の保存結果をその場で通知する
   - 保存中はボタン表示を切り替え、更新成功後は同じ画面で完了メッセージを支援技術にも通知します。
 - ログイン画面の補助情報を段階表示する
-  - 新規登録は短い1行にし、デモのパスワード再設定制約は必要な場合だけ開ける情報ボックスへ分離します。
+  - 新規登録は短い1行にし、パスワード再設定と問い合わせ先は必要な場合だけ開ける情報ボックスへ分離します。
 - 機能単位でTDDを行う
   - 詳細設計、REDテスト、最小実装、リファクタリング、全体検証の順で進めます。
 - 退会時は共有履歴を保持して個人情報を匿名化する
@@ -167,8 +175,8 @@ Gitへ登録しません。
   - 固定IDに依存せず架空メールアドレスをキーに更新し、繰り返し実行してもデータを重複させません。
 - 無料公開環境ではPostgreSQLを1台だけ使用する
   - MVPで不要なcache・queue・realtime用DBを持たず、構成と運用を単純にします。
-- パスワード再設定を実在ユーザー受け入れ前の必須条件にする
-  - 未実装中は架空データだけを使い、本人確認のない手動再発行や仮パスワード共有は行いません。
+- パスワード再設定時は既存セッションをすべて失効する
+  - tokenはDBへdigestだけを保存し、30分・一回限りで使用します。
 
 ## 工夫した点
 
@@ -188,14 +196,14 @@ Gitへ登録しません。
 | 状態 | コマンド | テスト範囲 |
 |---|---|---|
 | GREEN | `npm --prefix frontend run test -- src/app/page.test.tsx` | トップ画面の見出し、登録・ログイン導線 |
-| GREEN | `npm --prefix frontend run test` | 全101件。募集保存後の通知・遷移・一覧更新、利用者種別に応じた空状態CTA、トップのレスポンシブ表示・利用者別登録導線、認証済み画面遷移、読み込み・再試行、デザイントークン、共通フォーカス表示、デスクトップ・モバイルナビゲーション、ログアウト、セッション切れ、プロフィール、検索、会話、募集・応募、アカウント削除、404 |
+| GREEN | `npm --prefix frontend run test` | 全105件。既存導線に加え、パスワード再設定と公開デモの個人情報警告を検証 |
 | GREEN | Railsテストコマンドの末尾に `test/integration/api/v1/health_test.rb` を指定 | APIヘルスチェック |
-| GREEN | 下記のRailsテストコマンド | 全93件。認証、プロフィール、検索、会話、募集・応募、アカウント削除・匿名化、seed、transaction、pagination、認証認可、公開制御、重複防止 |
+| 要CI確認 | 下記のRailsテストコマンド | 全102件。既存導線に加え、session世代、login制限、デモ登録制限、password再設定を検証 |
 | GREEN | Railsの `db:rollback STEP=1` 後に `db:migrate` | プロフィール関連migrationのロールバックと再適用 |
-| GREEN | `docker compose run --rm backend bin/rails zeitwerk:check` | Railsの自動読み込み整合性 |
-| GREEN | `docker compose run --rm backend bin/rubocop` | 80ファイル、違反なし |
-| GREEN | `docker compose run --rm backend bin/brakeman --no-pager` | セキュリティ警告0件 |
-| GREEN | `docker compose run --rm backend bin/bundler-audit check --update` | 依存gemの既知脆弱性なし |
+| 要CI確認 | `docker compose run --rm backend bin/rails zeitwerk:check` | Railsの自動読み込み整合性 |
+| 要CI確認 | `docker compose run --rm backend bin/rubocop` | Rubyコード規約 |
+| 要CI確認 | `docker compose run --rm backend bin/brakeman --no-pager` | Rails静的セキュリティ解析 |
+| 要CI確認 | `docker compose run --rm backend bin/bundler-audit check --update` | 依存gemの既知脆弱性 |
 
 フロントエンド:
 
@@ -226,9 +234,7 @@ docker compose run --rm backend bin/bundler-audit check --update
 
 ## 今後の改善
 
-- メールによる有効期限付き・1回限りのパスワード再設定
 - メールアドレス確認
-- ログイン試行回数制限とrate limit
 - 主要導線のE2Eテスト
 - 無料公開環境のcold startとDB有効期限への対応
 
@@ -241,8 +247,9 @@ docker compose run --rm backend bin/bundler-audit check --update
    `DEMO_USER_PASSWORD` に8文字以上の値を設定します。
 2. RenderのWeb Serviceが起動したら、公開されたRails APIのoriginを確認します。
 3. Vercelへ同じGitHubリポジトリを接続し、Root Directoryを `frontend` に設定します。
-4. Vercelの `BACKEND_ORIGIN` にRender APIのoriginを設定してデプロイします。
-5. Vercel URLから登録、ログイン、検索、応募、会話、ログアウトを確認します。
+4. Vercelの `BACKEND_ORIGIN` と `DEMO_MODE=true` を設定してデプロイします。
+5. RenderへSMTP関連のsecretを設定し、再設定メールの送信を確認します。
+6. Vercel URLから登録、ログイン、検索、応募、会話、ログアウトを確認します。
 
 公開時は `LOAD_DEMO_SEEDS=true` により、Railsコンテナ起動時にmigrationと架空データを
 再適用します。seedは再実行しても同じメールアドレスのデータを重複作成しません。

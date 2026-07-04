@@ -54,6 +54,23 @@ export async function logoutUser(): Promise<void> {
   clearCsrfToken();
 }
 
+export async function requestPasswordReset(email: string): Promise<void> {
+  await sendEmptyWithCsrf("/api/v1/auth/password_reset", "POST", { email });
+}
+
+export async function resetPassword(
+  token: string,
+  password: string,
+  passwordConfirmation: string,
+): Promise<void> {
+  await sendEmptyWithCsrf("/api/v1/auth/password_reset", "PATCH", {
+    token,
+    password,
+    password_confirmation: passwordConfirmation,
+  });
+  clearCsrfToken();
+}
+
 export async function getCurrentUser(): Promise<CurrentUser> {
   const response = await fetch("/api/v1/me", {
     cache: "no-store",
@@ -116,4 +133,23 @@ async function parseError(response: Response): Promise<ApiErrorResponse> {
 function clearCsrfToken() {
   csrfToken = null;
   csrfRequest = null;
+}
+
+async function sendEmptyWithCsrf(
+  path: string,
+  method: "POST" | "PATCH",
+  body: object,
+): Promise<void> {
+  const token = await prefetchCsrfToken();
+  const response = await fetch(path, {
+    method,
+    credentials: "same-origin",
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRF-Token": token,
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (!response.ok) throw await parseError(response);
 }

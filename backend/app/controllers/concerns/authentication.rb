@@ -6,7 +6,10 @@ module Authentication
   def current_user
     return @current_user if defined?(@current_user)
 
-    @current_user = User.active.find_by(id: session[:user_id])
+    @current_user = User.active.find_by(
+      id: session[:user_id],
+      session_version: session[:session_version]
+    )
     reset_session if session[:user_id].present? && @current_user.nil?
     @current_user
   end
@@ -40,5 +43,6 @@ module Authentication
   def sign_in(user)
     reset_session
     session[:user_id] = user.id
+    session[:session_version] = user.session_version
   end
 end

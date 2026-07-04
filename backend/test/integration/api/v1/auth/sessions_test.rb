@@ -56,6 +56,33 @@ class ApiV1AuthSessionsTest < ActionDispatch::IntegrationTest
     assert_response :unauthorized
   end
 
+  test "sign out invalidates a copied session cookie" do
+    user = create_user
+    login(email: user.email, password: "password123")
+    stolen_cookie = cookies["_intern_scout_session"]
+
+    delete "/api/v1/auth/session", headers: csrf_headers
+    assert_response :no_content
+
+    cookies["_intern_scout_session"] = stolen_cookie
+    get "/api/v1/me"
+    assert_response :unauthorized
+  end
+
+  test "rate limits repeated failed logins" do
+    create_user
+
+    5.times do
+      login(email: "intern@example.com", password: "wrong-password")
+      assert_response :unauthorized
+    end
+
+    login(email: "intern@example.com", password: "wrong-password")
+    assert_response :too_many_requests
+    assert_equal "too_many_login_attempts", response.parsed_body.dig("errors", 0, "code")
+    assert response.headers["Retry-After"].present?
+  end
+
   test "rejects sign out when unauthenticated" do
     delete "/api/v1/auth/session", headers: csrf_headers
 

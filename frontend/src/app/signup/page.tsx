@@ -20,7 +20,7 @@ export default async function SignupPage({ searchParams }: Props) {
           <p className={styles.muted}>利用者種別を選び、必要事項を入力してください。</p>
         </div>
         <AuthPageGuard returnTo={null}>
-          <SignupForm initialRole={role} />
+          <SignupForm initialRole={role} demoMode={process.env.DEMO_MODE === "true"} />
         </AuthPageGuard>
       </section>
     </main>

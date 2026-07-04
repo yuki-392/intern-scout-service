@@ -7,6 +7,8 @@ module Api
         before_action :reject_authenticated_user!
 
         def create
+          return render_demo_email_required unless demo_email_allowed?
+
           user = User.new(user_attributes)
           company = ::Company.new(user:, name: registration_params[:company_name]) if user.role == "company"
 
@@ -64,6 +66,22 @@ module Api
             field:,
             message:
           }
+        end
+
+        def demo_email_allowed?
+          ENV["DEMO_MODE"] != "true" || registration_params[:email].to_s.strip.downcase.end_with?(".example")
+        end
+
+        def render_demo_email_required
+          render json: {
+            errors: [
+              {
+                code: "demo_email_required",
+                field: "email",
+                message: "公開デモでは実在しない.exampleメールアドレスを使用してください"
+              }
+            ]
+          }, status: :unprocessable_entity
         end
       end
     end

@@ -99,6 +99,20 @@ class ApiV1AuthRegistrationsTest < ActionDispatch::IntegrationTest
     assert_not_includes serialized, "deleted_at"
   end
 
+  test "demo mode only accepts reserved example addresses" do
+    previous = ENV["DEMO_MODE"]
+    ENV["DEMO_MODE"] = "true"
+
+    assert_no_difference -> { User.count } do
+      register(user_params(role: "intern", email: "real-user@gmail.com"))
+    end
+
+    assert_response :unprocessable_entity
+    assert_equal "demo_email_required", response.parsed_body.dig("errors", 0, "code")
+  ensure
+    ENV["DEMO_MODE"] = previous
+  end
+
   private
 
   def register(params)

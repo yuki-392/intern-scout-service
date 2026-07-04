@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_01_170000) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_03_090100) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -103,6 +103,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_01_170000) do
     t.check_constraint "status::text = ANY (ARRAY['draft'::character varying, 'published'::character varying]::text[])", name: "job_postings_status_check"
   end
 
+  create_table "login_throttles", force: :cascade do |t|
+    t.datetime "blocked_until"
+    t.datetime "created_at", null: false
+    t.integer "failure_count", default: 0, null: false
+    t.string "key_digest", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "window_started_at", null: false
+    t.index ["key_digest"], name: "index_login_throttles_on_key_digest", unique: true
+  end
+
   create_table "messages", force: :cascade do |t|
     t.text "body", null: false
     t.bigint "conversation_id", null: false
@@ -129,9 +139,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_01_170000) do
     t.datetime "deleted_at"
     t.string "email", null: false
     t.string "password_digest", null: false
+    t.string "reset_password_digest"
+    t.datetime "reset_password_sent_at"
     t.string "role", null: false
+    t.integer "session_version", default: 0, null: false
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_digest"], name: "index_users_on_reset_password_digest", unique: true
     t.check_constraint "role::text = ANY (ARRAY['intern'::character varying, 'company'::character varying]::text[])", name: "users_role_check"
   end
 

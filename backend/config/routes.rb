@@ -23,6 +23,8 @@ Rails.application.routes.draw do
         post "registrations", to: "registrations#create"
         post "session", to: "sessions#create"
         delete "session", to: "sessions#destroy"
+        post "password_reset", to: "password_resets#create"
+        patch "password_reset", to: "password_resets#update"
       end
     end
   end

@@ -66,16 +66,13 @@ describe("LoginForm", () => {
     expect(screen.getByRole("button", { name: "ログイン" })).toBeDefined();
   });
 
-  it("shows fixed demo guidance when support is not configured", () => {
+  it("offers password reset when support is not configured", () => {
     render(<LoginForm reason={null} returnTo={null} supportContact={null} />);
 
     const recovery = screen.getByText("パスワードを忘れた方").closest("details");
     expect(recovery?.hasAttribute("open")).toBe(false);
-    expect(
-      screen.getByText(
-        "このデモではパスワードを再設定できません。新しいデモ用アカウントをご利用ください",
-      ),
-    ).toBeDefined();
+    expect(screen.getByRole("link", { name: "パスワードを再設定する" }).getAttribute("href"))
+      .toBe("/forgot-password");
   });
 
   it("shows a generic message for invalid credentials", async () => {

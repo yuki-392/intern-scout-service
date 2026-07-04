@@ -111,4 +111,26 @@ describe("getCurrentUser", () => {
     await expect(getCurrentUser()).resolves.toEqual(user);
     expect(fetchMock).toHaveBeenCalledWith("/api/v1/me", { cache: "no-store", credentials: "same-origin" });
   });
+
+  it("requests and completes a password reset", async () => {
+    const { requestPasswordReset, resetPassword } = await import("./auth-api");
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(csrfResponse("csrf-token"))
+      .mockResolvedValueOnce(new Response(null, { status: 202 }))
+      .mockResolvedValueOnce(new Response(null, { status: 204 }));
+    vi.stubGlobal("fetch", fetchMock);
+
+    await requestPasswordReset("intern@example.com");
+    await resetPassword("token", "new-password123", "new-password123");
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      "/api/v1/auth/password_reset",
+      expect.objectContaining({ method: "POST" }),
+    );
+    expect(fetchMock).toHaveBeenCalledWith(
+      "/api/v1/auth/password_reset",
+      expect.objectContaining({ method: "PATCH" }),
+    );
+  });
 });

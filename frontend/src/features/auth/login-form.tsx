@@ -95,16 +95,19 @@ export function LoginForm({ reason, returnTo, supportContact }: Props) {
         </p>
         <details className={styles.recovery}>
           <summary>パスワードを忘れた方</summary>
+          <p className={styles.help}>
+            <Link href="/forgot-password">パスワードを再設定する</Link>
+          </p>
           {supportContact ? (
             <p className={styles.help}>
-              パスワード再設定は準備中です。
+              メールを受け取れない場合は
               <a href={supportContact.href}>
                 {supportContact.label}へ問い合わせる
               </a>
             </p>
           ) : (
             <p className={styles.help}>
-              このデモではパスワードを再設定できません。新しいデモ用アカウントをご利用ください
+              メールが届かない場合は、入力したアドレスと迷惑メールフォルダをご確認ください
             </p>
           )}
         </details>

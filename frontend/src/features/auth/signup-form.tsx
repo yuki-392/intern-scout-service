@@ -9,9 +9,10 @@ import styles from "./auth-form.module.css";
 
 type Props = {
   initialRole: UserRole | null;
+  demoMode?: boolean;
 };
 
-export function SignupForm({ initialRole }: Props) {
+export function SignupForm({ initialRole, demoMode = false }: Props) {
   const router = useRouter();
   const [role, setRole] = useState<UserRole | null>(initialRole);
   const [email, setEmail] = useState("");
@@ -84,6 +85,11 @@ export function SignupForm({ initialRole }: Props) {
 
   return (
     <form className={styles.form} onSubmit={handleSubmit} noValidate>
+      {demoMode && (
+        <p className={styles.notice}>
+          公開デモです。実在する個人情報は入力せず、メールアドレスは.exampleで終わる架空のものを使用してください。
+        </p>
+      )}
       <p className={styles.muted}>
         {role === "intern" ? "インターン生" : "企業担当者"}として登録します
       </p>

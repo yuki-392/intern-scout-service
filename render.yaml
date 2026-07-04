@@ -17,6 +17,18 @@ services:
         sync: false
       - key: LOAD_DEMO_SEEDS
         value: "true"
+      - key: DEMO_MODE
+        value: "true"
+      - key: FRONTEND_ORIGIN
+        value: https://intern-scout-service.vercel.app
+      - key: SMTP_ADDRESS
+        sync: false
+      - key: SMTP_USERNAME
+        sync: false
+      - key: SMTP_PASSWORD
+        sync: false
+      - key: MAIL_FROM
+        sync: false
 
 databases:
   - name: intern-scout-db
