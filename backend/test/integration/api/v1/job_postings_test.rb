@@ -51,6 +51,28 @@ class ApiV1JobPostingsTest < ActionDispatch::IntegrationTest
     assert_not_includes response.body, "company@example.com"
   end
 
+  test "public posting list loads application flags in one query" do
+    company = create_company("company@example.com", "Example")
+    postings = 3.times.map { |index| create_posting(company, title: "公開#{index}") }
+    intern = create_intern
+    sign_in(intern)
+    apply(postings.first)
+
+    application_queries = []
+    subscriber = lambda do |*, payload|
+      application_queries << payload[:sql] if payload[:sql].include?('FROM "applications"')
+    end
+    ActiveSupport::Notifications.subscribed(subscriber, "sql.active_record") do
+      get "/api/v1/job_postings", params: { page: 1 }
+    end
+
+    assert_response :success
+    assert_equal 1, application_queries.size
+    applied_by_id = response.parsed_body.fetch("data").to_h { |item| [ item.fetch("id"), item.fetch("applied") ] }
+    assert_equal true, applied_by_id.fetch(postings.first.id)
+    assert_equal false, applied_by_id.fetch(postings.second.id)
+  end
+
   test "draft and deleted company posting use not found" do
     company = create_company("company@example.com", "Example")
     draft = create_posting(company, status: "draft")

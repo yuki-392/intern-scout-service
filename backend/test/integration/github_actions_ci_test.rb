@@ -3,7 +3,8 @@ require "yaml"
 
 class GithubActionsCiTest < ActiveSupport::TestCase
   test "backend CI provides the password required when preparing a fresh database" do
-    workflow = YAML.safe_load_file(Rails.root.parent.join(".github/workflows/ci.yml"))
+    repository_root = Pathname(ENV.fetch("REPOSITORY_ROOT", Rails.root.parent.to_s))
+    workflow = YAML.safe_load_file(repository_root.join(".github/workflows/ci.yml"))
     password = workflow.dig("jobs", "backend", "env", "DEMO_USER_PASSWORD")
 
     assert password.is_a?(String) && password.length >= 8,

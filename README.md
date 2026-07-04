@@ -169,6 +169,8 @@ production環境ではSMTP関連の環境変数を設定してください。
   - 作成IDを一覧へ引き継いで古い0件表示を破棄し、完了メッセージと最新の募集を表示します。
 - APIレスポンスのデータ部分だけを画面へ渡す
   - 募集保存時も共通の `{ data: ... }` 形式を展開し、保存後のIDを正しい遷移先に使用します。
+- Serializerからデータベース参照を分離する
+  - 公開募集一覧の応募済みIDを1クエリで取得し、件数に比例して問い合わせが増えるN+1を防ぎます。
 - 募集編集の保存結果をその場で通知する
   - 保存中はボタン表示を切り替え、更新成功後は同じ画面で完了メッセージを支援技術にも通知します。
 - ログイン画面の補助情報を段階表示する
@@ -210,7 +212,7 @@ production環境ではSMTP関連の環境変数を設定してください。
 | GREEN | `npm --prefix frontend run test -- src/app/page.test.tsx` | トップ画面の見出し、登録・ログイン導線 |
 | GREEN | `npm --prefix frontend run test` | 全112件。既存導線に加え、公開募集・会話履歴のページ移動、パスワード再設定、公開デモの個人情報警告を検証 |
 | GREEN | Railsテストコマンドの末尾に `test/integration/api/v1/health_test.rb` を指定 | APIヘルスチェック |
-| 要CI確認 | 下記のRailsテストコマンド | 全102件。既存導線に加え、session世代、login制限、デモ登録制限、password再設定を検証 |
+| 要CI確認 | 下記のRailsテストコマンド | 全103件。既存導線に加え、公開募集のN+1防止、session世代、login制限、デモ登録制限、password再設定を検証 |
 | GREEN | Railsの `db:rollback STEP=1` 後に `db:migrate` | プロフィール関連migrationのロールバックと再適用 |
 | 要CI確認 | `docker compose run --rm backend bin/rails zeitwerk:check` | Railsの自動読み込み整合性 |
 | 要CI確認 | `docker compose run --rm backend bin/rubocop` | Rubyコード規約 |

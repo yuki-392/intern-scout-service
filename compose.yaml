@@ -29,6 +29,7 @@ services:
       SMTP_USERNAME: ${SMTP_USERNAME:-}
       SMTP_PASSWORD: ${SMTP_PASSWORD:-}
       MAIL_FROM: ${MAIL_FROM:-no-reply@intern-scout.example}
+      REPOSITORY_ROOT: /workspace
     depends_on:
       db:
         condition: service_healthy
@@ -36,6 +37,7 @@ services:
       - "3001:3001"
     volumes:
       - ./backend:/rails
+      - ./.github:/workspace/.github:ro
 
 volumes:
   postgres_data:

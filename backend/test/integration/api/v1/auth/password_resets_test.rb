@@ -23,7 +23,7 @@ class ApiV1AuthPasswordResetsTest < ActionDispatch::IntegrationTest
     end
     assert_response :accepted
     assert_equal 1, ActionMailer::Base.deliveries.size
-    assert_match %r{/reset-password#token=}, ActionMailer::Base.deliveries.last.body.encoded
+    assert_match %r{/reset-password#token=}, ActionMailer::Base.deliveries.last.text_part.decoded
 
     assert_no_enqueued_jobs do
       post "/api/v1/auth/password_reset", params: { email: "unknown@example.com" }, headers: csrf_headers, as: :json
