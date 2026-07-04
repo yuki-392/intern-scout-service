@@ -10,10 +10,25 @@ class ApiV1JobPostingsTest < ActionDispatch::IntegrationTest
     assert_response :created
     posting = JobPosting.last
     assert_equal [ "Ruby", "Rails" ], response.parsed_body.dig("data", "technical_stacks")
+    assert_equal "自社サービスを開発しています。", response.parsed_body.dig("data", "company_description")
+    assert_equal "https://example.com", response.parsed_body.dig("data", "company_website_url")
+    assert_equal "自社サービスを開発しています。", company.reload.description
 
     patch "/api/v1/company/job_postings/#{posting.id}", params: { job_posting: posting_params(title: "更新", technical_stacks: [ "TypeScript" ]) }, headers: csrf_headers, as: :json
     assert_response :success
     assert_equal "更新", posting.reload.title
+  end
+
+  test "invalid company website does not create a posting or update the company" do
+    company = create_company("company@example.com", "Example")
+    sign_in(company.user)
+
+    assert_no_difference -> { JobPosting.count } do
+      post "/api/v1/company/job_postings", params: { job_posting: posting_params(company_description: "変更後", company_website_url: "javascript:alert(1)") }, headers: csrf_headers, as: :json
+    end
+
+    assert_response :unprocessable_entity
+    assert_nil company.reload.description
   end
 
   test "company posting list paginates twenty at a time" do
@@ -85,7 +100,21 @@ class ApiV1JobPostingsTest < ActionDispatch::IntegrationTest
     assert_equal 1, application_queries.size
     applied_by_id = response.parsed_body.fetch("data").to_h { |item| [ item.fetch("id"), item.fetch("applied") ] }
     assert_equal true, applied_by_id.fetch(postings.first.id)
-    assert_equal false, applied_by_id.fetch(postings.second.id)
+    assert_equal true, applied_by_id.fetch(postings.second.id)
+  end
+
+  test "intern sees another posting from an applied company as applied" do
+    company = create_company("company@example.com", "Example")
+    applied_posting = create_posting(company, title: "応募した募集")
+    another_posting = create_posting(company, title: "別の募集")
+    intern = create_intern
+    sign_in(intern)
+    apply(applied_posting)
+
+    get "/api/v1/job_postings/#{another_posting.id}"
+
+    assert_response :success
+    assert_equal true, response.parsed_body.dig("data", "applied")
   end
 
   test "draft and deleted company posting use not found" do
@@ -133,6 +162,21 @@ class ApiV1JobPostingsTest < ActionDispatch::IntegrationTest
     assert_equal "already_applied", response.parsed_body.dig("errors", 0, "code")
   end
 
+  test "intern cannot apply to another posting from the same company" do
+    company = create_company("company@example.com", "Example")
+    first_posting = create_posting(company, title: "最初の募集")
+    another_posting = create_posting(company, title: "別の募集")
+    intern = create_intern
+    sign_in(intern)
+    apply(first_posting)
+
+    assert_no_difference [ -> { Application.count }, -> { Message.count } ] do
+      apply(another_posting)
+    end
+    assert_response :conflict
+    assert_equal "already_applied", response.parsed_body.dig("errors", 0, "code")
+  end
+
   test "unpublishing keeps existing application conversation and message" do
     company = create_company("company@example.com", "Example")
     posting = create_posting(company)
@@ -164,7 +208,7 @@ class ApiV1JobPostingsTest < ActionDispatch::IntegrationTest
     posting
   end
   def posting_params(overrides = {})
-    { title: "募集", description: "業務", work_conditions: "条件", status: "published", technical_stacks: [ "Ruby", "Rails" ] }.merge(overrides)
+    { title: "募集", description: "業務", work_conditions: "条件", status: "published", technical_stacks: [ "Ruby", "Rails" ], company_description: "自社サービスを開発しています。", company_website_url: "https://example.com" }.merge(overrides)
   end
   def sign_in(user)
     post "/api/v1/auth/session", params: { session: { email: user.email, password: "password123" } }, headers: csrf_headers, as: :json

@@ -12,6 +12,14 @@ const authCss = readFileSync(
   resolve(process.cwd(), "src/features/auth/auth-form.module.css"),
   "utf8",
 );
+const conversationCss = readFileSync(
+  resolve(process.cwd(), "src/features/conversations/conversations.module.css"),
+  "utf8",
+);
+const internSearchCss = readFileSync(
+  resolve(process.cwd(), "src/features/intern-search/intern-search.module.css"),
+  "utf8",
+);
 const componentCss = [
   "src/app/page.module.css",
   "src/features/auth/auth-form.module.css",
@@ -80,6 +88,39 @@ describe("job posting empty state", () => {
   it("centers its primary action", () => {
     expect(jobPostingCss).toMatch(
       /\.emptyState \.detailLink\s*\{[^}]*justify-self:\s*center;/,
+    );
+  });
+});
+
+describe("job posting actions", () => {
+  it("shows a pointer cursor for clickable buttons", () => {
+    expect(jobPostingCss).toMatch(
+      /\.button\s*\{[^}]*cursor:\s*pointer;/,
+    );
+    expect(jobPostingCss).toMatch(
+      /\.secondaryButton\s*\{[^}]*cursor:\s*pointer;/,
+    );
+  });
+
+  it("keeps the cursor unchanged for an applied button", () => {
+    expect(jobPostingCss).toMatch(
+      /\.appliedButton\s*\{[^}]*cursor:\s*default;/,
+    );
+  });
+});
+
+describe("conversation message boxes", () => {
+  it("uses one fixed wide rectangle for replies and scout messages", () => {
+    expect(conversationCss).toMatch(
+      /\.form textarea\s*\{[^}]*width:\s*100%;[^}]*height:\s*120px;[^}]*resize:\s*none;/,
+    );
+  });
+});
+
+describe("existing conversation action", () => {
+  it("keeps the conversation button label visible inside a profile card", () => {
+    expect(internSearchCss).toMatch(
+      /\.card \.button\s*\{[^}]*color:\s*var\(--color-surface\);[^}]*text-decoration:\s*none;/,
     );
   });
 });

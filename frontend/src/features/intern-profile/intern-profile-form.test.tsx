@@ -44,7 +44,8 @@ describe("InternProfileForm", () => {
     expect(await screen.findByLabelText("表示名")).toBeDefined();
     expect(screen.getByLabelText("学校名")).toBeDefined();
     expect(screen.getByLabelText("学年")).toBeDefined();
-    expect(screen.getByLabelText("自己紹介")).toBeDefined();
+    expect(screen.getByLabelText("経験・制作物")).toBeDefined();
+    expect(screen.getByText("これまで取り組んだ開発や制作物、担当した役割を記載してください")).toBeDefined();
     expect(screen.getByLabelText("希望職種")).toBeDefined();
   });
 

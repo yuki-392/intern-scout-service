@@ -19,21 +19,21 @@ module DemoSeeds
 
   def create_companies
     [
-      [ "company@demo.example", "Demo Tech株式会社" ],
-      [ "startup@demo.example", "みらいプロダクト株式会社" ]
-    ].to_h do |email, name|
+      [ "company@demo.example", "Demo Tech株式会社", "Webサービスの設計・開発を通じて、学生が実践的に学べる環境を提供しています。", "https://example.com" ],
+      [ "startup@demo.example", "みらいプロダクト株式会社", "データを活用して新しいプロダクト体験をつくるスタートアップです。", "https://example.org" ]
+    ].to_h do |email, name, description, website_url|
       user = upsert_user(email:, role: "company")
       company = Company.find_or_initialize_by(user:)
-      company.update!(name:)
+      company.update!(name:, description:, website_url:)
       [ email, company ]
     end
   end
 
   def create_interns(stacks)
     data = [
-      [ "intern@demo.example", "山田 デモ", "青空大学", "3年", "バックエンド開発に挑戦したいです。", "バックエンドエンジニア", %w[Rails PostgreSQL Docker] ],
-      [ "frontend-intern@demo.example", "佐藤 サンプル", "未来大学", "2年", "使いやすいWeb画面づくりを学んでいます。", "フロントエンドエンジニア", %w[React TypeScript Next.js] ],
-      [ "data-intern@demo.example", "鈴木 テスト", "青空大学", "修士1年", "データ分析とWeb開発を組み合わせたいです。", "データエンジニア", %w[Python PostgreSQL Docker] ]
+      [ "intern@demo.example", "山田 デモ", "青空大学", "3年", "授業のチーム開発でRails APIを担当し、PostgreSQLのテーブル設計とDockerによる開発環境を構築しました。", "バックエンドエンジニア", %w[Rails PostgreSQL Docker] ],
+      [ "frontend-intern@demo.example", "佐藤 サンプル", "未来大学", "2年", "学内イベント管理Webアプリを制作し、ReactとTypeScriptを使った画面設計・実装を担当しました。", "フロントエンドエンジニア", %w[React TypeScript Next.js] ],
+      [ "data-intern@demo.example", "鈴木 テスト", "青空大学", "修士1年", "研究データを集計するPythonスクリプトと、結果を確認できるダッシュボードを制作しました。", "データエンジニア", %w[Python PostgreSQL Docker] ]
     ]
 
     data.to_h do |email, display_name, school_name, grade, bio, desired_role, stack_names|

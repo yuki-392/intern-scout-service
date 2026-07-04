@@ -19,7 +19,9 @@ class CurrentUserSerializer
 
     {
       id: @user.company.id,
-      name: @user.company.name
+      name: @user.company.name,
+      description: @user.company.description,
+      website_url: @user.company.website_url
     }
   end
 end

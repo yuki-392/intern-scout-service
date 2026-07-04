@@ -88,6 +88,19 @@ class ApiV1InternsTest < ActionDispatch::IntegrationTest
     assert_not_includes response.body, "user_id"
     assert_not_includes response.body, "email"
     assert_not_includes response.body, "password"
+    assert_nil response.parsed_body.dig("data", "conversation_id")
+  end
+
+  test "shows the existing conversation with the intern" do
+    company_user = create_user(role: "company", email: "company@example.com")
+    sign_in(company_user)
+    profile = create_profile(index: 1)
+    conversation = Conversation.create!(company_user:, intern_user: profile.user, last_messaged_at: Time.current)
+
+    get "/api/v1/interns/#{profile.id}"
+
+    assert_response :success
+    assert_equal conversation.id, response.parsed_body.dig("data", "conversation_id")
   end
 
   test "uses the same not found response for missing and deleted profiles" do

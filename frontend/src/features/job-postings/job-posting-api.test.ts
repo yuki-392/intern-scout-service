@@ -10,6 +10,8 @@ describe("job-posting-api", () => {
     const saved = {
       id: 3,
       company_name: "Example",
+      company_description: "企業紹介",
+      company_website_url: "https://example.com",
       title: "Rails募集",
       description: "開発",
       work_conditions: "週3日",
@@ -26,6 +28,8 @@ describe("job-posting-api", () => {
       title: "Rails募集",
       description: "開発",
       work_conditions: "週3日",
+      company_description: "企業紹介",
+      company_website_url: "https://example.com",
       status: "published",
       technical_stacks: ["Ruby"],
     });

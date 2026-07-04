@@ -14,11 +14,13 @@ describe("JobPostingForm", () => {
     fireEvent.change(screen.getByLabelText("タイトル"), { target: { value: "Rails募集" } });
     fireEvent.change(screen.getByLabelText("業務内容"), { target: { value: "開発" } });
     fireEvent.change(screen.getByLabelText("勤務条件"), { target: { value: "週3日" } });
+    fireEvent.change(screen.getByLabelText("企業紹介"), { target: { value: "自社サービスを開発しています。" } });
+    fireEvent.change(screen.getByLabelText("企業ホームページ"), { target: { value: "https://example.com" } });
     fireEvent.change(screen.getByLabelText("技術スタックを追加"), { target: { value: "Ruby" } });
     fireEvent.click(screen.getByRole("button", { name: "追加" }));
     fireEvent.click(screen.getByLabelText("公開する"));
     fireEvent.click(screen.getByRole("button", { name: "募集を保存" }));
-    await waitFor(() => expect(mocks.save).toHaveBeenCalledWith(null, expect.objectContaining({ title: "Rails募集", status: "published", technical_stacks: ["Ruby"] })));
+    await waitFor(() => expect(mocks.save).toHaveBeenCalledWith(null, expect.objectContaining({ title: "Rails募集", status: "published", technical_stacks: ["Ruby"], company_description: "自社サービスを開発しています。", company_website_url: "https://example.com" })));
     expect(mocks.replace).toHaveBeenCalledWith("/company/jobs?created=3");
   });
   it("shows all errors and prevents duplicate submission", async () => {
@@ -32,7 +34,7 @@ describe("JobPostingForm", () => {
 
   it("announces a successful update without navigating away", async () => {
     mocks.save.mockResolvedValue({ id: 7 });
-    render(<JobPostingForm posting={{ id: 7, company_name: "Example", title: "募集", description: "開発", work_conditions: "週3日", status: "draft", technical_stacks: [] }} />);
+    render(<JobPostingForm posting={{ id: 7, company_name: "Example", company_description: "企業紹介", company_website_url: "https://example.com", title: "募集", description: "開発", work_conditions: "週3日", status: "draft", technical_stacks: [] }} />);
 
     fireEvent.click(screen.getByRole("button", { name: "募集を保存" }));
 

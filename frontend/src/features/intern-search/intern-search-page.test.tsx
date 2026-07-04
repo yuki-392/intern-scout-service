@@ -45,6 +45,7 @@ describe("InternSearchPage", () => {
     render(<InternSearchPage initialQuery={{ school_name: "東京", desired_role: "", technical_stack: "", page: 2 }} />);
 
     expect((await screen.findByRole("link", { name: "たかしの詳細を見る" })).getAttribute("href")).toBe("/interns/7?return_to=%2Finterns%3Fschool_name%3D%25E6%259D%25B1%25E4%25BA%25AC%26page%3D2");
+    expect(screen.getByText("経験・制作物")).toBeDefined();
     expect(screen.getByText("2 / 3ページ")).toBeDefined();
     fireEvent.click(screen.getByRole("button", { name: "次のページ" }));
     expect(mocks.push).toHaveBeenCalledWith("/interns?school_name=%E6%9D%B1%E4%BA%AC&page=3");

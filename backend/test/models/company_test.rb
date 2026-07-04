@@ -43,6 +43,14 @@ class CompanyTest < ActiveSupport::TestCase
     assert duplicate.errors.of_kind?(:user_id, :taken)
   end
 
+  test "company description and website are optional and validated" do
+    company = Company.new(user: create_user(role: "company", email: "company@example.com"), name: "Example", description: "a" * 2_001, website_url: "javascript:alert(1)")
+
+    assert_not company.valid?
+    assert company.errors.of_kind?(:description, :too_long)
+    assert_includes company.errors.attribute_names, :website_url
+  end
+
   private
 
   def create_user(role:, email:)

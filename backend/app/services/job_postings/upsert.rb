@@ -1,15 +1,18 @@
 module JobPostings
   class Upsert
     attr_reader :posting, :errors
-    def initialize(posting:, attributes:, stack_names:)
-      @posting = posting; @attributes = attributes; @stack_names = stack_names || []; @errors = []
+    def initialize(posting:, attributes:, stack_names:, company:, company_attributes:)
+      @posting = posting; @attributes = attributes; @stack_names = stack_names || []; @company = company; @company_attributes = company_attributes; @errors = []
     end
     def call
       posting.assign_attributes(@attributes)
+      @company.assign_attributes(@company_attributes)
       validate_stacks
       posting.errors.each { |error| add(error.attribute.to_s, error.full_message) } unless posting.valid?
+      @company.errors.each { |error| add("company_#{error.attribute}", error.full_message) } unless @company.valid?
       return false if errors.any?
       ActiveRecord::Base.transaction do
+        @company.save!
         posting.save!
         posting.job_posting_technical_stacks.delete_all
         @stack_names.each_with_index do |name, position|

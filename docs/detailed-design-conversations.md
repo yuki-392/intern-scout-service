@@ -170,7 +170,8 @@ frontend/src/
     └── conversation-types.ts
 ```
 
-- インターン生詳細に「スカウトを送る」buttonと2,000文字のformを追加する。
+- 未接触のインターン生詳細に「スカウトを送る」buttonと2,000文字のformを追加する。
+- 既存会話がある場合はformを隠し、「この学生とはすでにやり取りしています」と会話へのlinkを表示する。
 - 送信成功後は作成・再利用したConversation詳細へ移動する。
 - 会話一覧はloading、empty、error、20件paginationを扱う。
 - 会話詳細は最新50件を古い順に表示し、過去pageへの導線を用意する。

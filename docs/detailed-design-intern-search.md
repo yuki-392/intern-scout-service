@@ -40,12 +40,12 @@
 - 表示名
 - 学校名
 - 学年
-- 自己紹介
+- 経験・制作物
 - 希望職種
 - 技術スタック
 - 掲載日時
 
-一覧では自己紹介を200文字までの概要として返し、詳細では全文を返す。email、user_id、
+一覧では経験・制作物を200文字までの概要として返し、詳細では全文を返す。email、user_id、
 password関連、deleted_atは返さない。プロフィールが存在しても `published_at` がないもの、
 退会済みUserに属するものは返さない。
 
@@ -78,7 +78,7 @@ response:
       "display_name": "たかし",
       "school_name": "Example大学",
       "grade": "3年",
-      "bio_excerpt": "Web開発を学んでいます。",
+      "bio_excerpt": "授業のチーム開発でWebアプリの画面実装を担当しました。",
       "desired_role": "バックエンドエンジニア",
       "technical_stacks": ["Ruby", "Rails"],
       "published_at": "2026-07-01T09:00:00Z"
@@ -115,7 +115,7 @@ response:
     "display_name": "たかし",
     "school_name": "Example大学",
     "grade": "3年",
-    "bio": "Web開発を学んでいます。",
+    "bio": "授業のチーム開発でWebアプリの画面実装を担当しました。",
     "desired_role": "バックエンドエンジニア",
     "technical_stacks": ["Ruby", "Rails"],
     "published_at": "2026-07-01T09:00:00Z"

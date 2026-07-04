@@ -4,7 +4,7 @@ export type CurrentUser = {
   id: number;
   email: string;
   role: UserRole;
-  company: { id: number; name: string } | null;
+  company: { id: number; name: string; description: string | null; website_url: string | null } | null;
 };
 
 export type ApiError = {

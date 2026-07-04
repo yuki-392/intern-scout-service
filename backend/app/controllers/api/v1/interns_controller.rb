@@ -22,8 +22,9 @@ module Api
           .includes(intern_profile_technical_stacks: :technical_stack).find_by(id: params[:id])
         return render_not_found unless profile
 
+        conversation = Conversation.find_by(company_user: current_user, intern_user_id: profile.user_id)
         response.headers["Cache-Control"] = "no-store"
-        render json: { data: InternProfileDetailSerializer.new(profile).as_json }
+        render json: { data: InternProfileDetailSerializer.new(profile, conversation_id: conversation&.id).as_json }
       end
 
       private

@@ -25,10 +25,10 @@ module Api
         end
         private
         def save(posting, status)
-          operation = JobPostings::Upsert.new(posting:, attributes: permitted.except(:technical_stacks), stack_names: permitted[:technical_stacks])
+          operation = JobPostings::Upsert.new(posting:, attributes: permitted.except(:technical_stacks, :company_description, :company_website_url), stack_names: permitted[:technical_stacks], company: current_user.company, company_attributes: { description: permitted[:company_description], website_url: permitted[:company_website_url] })
           operation.call ? render(json: { data: serialize(posting) }, status:) : render(json: { errors: operation.errors }, status: :unprocessable_entity)
         end
-        def permitted = params.require(:job_posting).permit(:title, :description, :work_conditions, :status, technical_stacks: [])
+        def permitted = params.require(:job_posting).permit(:title, :description, :work_conditions, :status, :company_description, :company_website_url, technical_stacks: [])
         def owned = current_user.company.job_postings.includes(job_posting_technical_stacks: :technical_stack).find_by(id: params[:id])
         def serialize(posting) = JobPostingSerializer.new(posting).as_json
         def pagination_meta(page, total, per_page)

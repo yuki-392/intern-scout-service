@@ -7,7 +7,7 @@ import { applyToJobPosting, getPublicJobPosting } from "./job-posting-api";
 import type { JobPosting } from "./job-posting-types";
 import styles from "./job-postings.module.css";
 
-type DetailState = "loading" | "ready" | "confirm" | "applied" | "success" | "not-found" | "error";
+type DetailState = "loading" | "ready" | "confirm" | "applying" | "applied" | "success" | "not-found" | "error";
 
 export function PublicJobDetail({ id }: { id: number }) {
   const [job, setJob] = useState<JobPosting | null>(null);
@@ -65,6 +65,7 @@ export function PublicJobDetail({ id }: { id: number }) {
   }
 
   async function apply() {
+    setState("applying");
     const result = await applyToJobPosting(id);
     setConversation(result.conversation_id);
     setState("success");
@@ -72,10 +73,21 @@ export function PublicJobDetail({ id }: { id: number }) {
 
   return (
     <article className={styles.panel}>
-      <h1>{job.title}</h1><p>{job.company_name}</p><p>{job.description}</p><p>{job.work_conditions}</p>
+      <h1>{job.title}</h1><p>{job.company_name}</p><section><h2>募集内容</h2><p>{job.description}</p><p>{job.work_conditions}</p></section>{(job.company_description || job.company_website_url) ? <section className={styles.companyProfile}><h2>企業について</h2>{job.company_description ? <p>{job.company_description}</p> : null}{job.company_website_url ? <a href={job.company_website_url} target="_blank" rel="noreferrer">企業ホームページを見る</a> : null}</section> : null}
       {state === "ready" && <button className={styles.button} onClick={() => setState("confirm")}>応募する</button>}
-      {state === "confirm" && <div><p>募集『{job.title}』に応募しました。プロフィールをご確認ください。が企業へ送信されます</p><button className={styles.button} onClick={() => void apply()}>応募を確定</button></div>}
-      {state === "applied" && <p>応募済み</p>}
+      {(state === "confirm" || state === "applying") && (
+        <div className={styles.dialogBackdrop}>
+          <section className={styles.confirmDialog} role="dialog" aria-modal="true" aria-labelledby="application-confirm-title">
+            <h2 id="application-confirm-title">応募の確認</h2>
+            <p>{job.title}に応募しますか？</p>
+            <div className={styles.dialogActions}>
+              <button className={styles.secondaryButton} disabled={state === "applying"} onClick={() => setState("ready")}>いいえ</button>
+              <button className={styles.button} disabled={state === "applying"} onClick={() => void apply()}>{state === "applying" ? "応募中…" : "はい"}</button>
+            </div>
+          </section>
+        </div>
+      )}
+      {state === "applied" && <button className={styles.appliedButton} disabled>応募済み</button>}
       {state === "success" && <p>応募しました</p>}
       {conversation && <Link href={`/conversations/${conversation}`}>会話を開く</Link>}
     </article>

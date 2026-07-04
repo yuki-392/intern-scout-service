@@ -4,11 +4,13 @@
 .field { display: grid; gap: 6px; font-weight: 700; }
 .field input { min-height: var(--control-height); padding: 8px 10px; border: 1px solid #aebdb5; border-radius: var(--radius-control); font: inherit; }
 .actions, .pagination { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
-.button { min-height: var(--control-height); padding: 8px 18px; border: 1px solid var(--color-primary); border-radius: 999px; color: var(--color-surface); background: var(--color-primary); font-weight: 700; }
+.button { min-height: var(--control-height); display: inline-flex; align-items: center; justify-content: center; justify-self: start; padding: 8px 18px; border: 1px solid var(--color-primary); border-radius: 999px; color: var(--color-surface); background: var(--color-primary); font-weight: 700; }
+.existingConversation { display: grid; gap: 10px; padding: 16px; border-radius: var(--radius-control); background: #edf5f0; }
 .secondary { color: var(--color-primary); background: var(--color-surface); }
 .list { display: grid; gap: 14px; padding: 0; list-style: none; }
 .card { display: grid; gap: 10px; padding: 22px; border: 1px solid var(--color-border); border-radius: var(--radius-card); background: var(--color-surface); }
 .card a { color: var(--color-primary); font-weight: 750; text-decoration: underline; }
+.card .button { color: var(--color-surface); text-decoration: none; }
 .stacks { display: flex; gap: 8px; flex-wrap: wrap; padding: 0; list-style: none; }
 .stacks li { padding: 4px 10px; border-radius: 999px; background: #e7f3ee; }
 @media (max-width: 700px) { .search { grid-template-columns: 1fr; } }
